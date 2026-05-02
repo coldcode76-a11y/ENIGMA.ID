@@ -1,288 +1,476 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clouds GTPS</title>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Clouds — Cyberpunk</title>
 
 <style>
+/* ================== THEME ================== */
 :root{
- --bg:#020617;
- --card:#0f172a;
- --soft:#111827;
- --gold:#facc15;
- --text:#e5e7eb;
- --muted:#9ca3af;
- --ok:#10b981;
- --bad:#ef4444;
+  --bg:#020617;
+  --card:#0b1222;
+  --glass:rgba(255,255,255,0.06);
+  --cyan:#22d3ee;
+  --pink:#ff00ff;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --ok:#10b981;
+  --bad:#ef4444;
 }
+
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
- margin:0;
- font-family:system-ui,Arial;
- background:radial-gradient(circle at top,#0f172a,#020617);
- color:var(--text);
+  margin:0;
+  font-family:system-ui,Segoe UI,Roboto,Arial;
+  color:var(--text);
+  background:linear-gradient(135deg,#020617,#0f172a);
+  overflow-x:hidden;
 }
 
-/* LOADING */
+/* ================== CANVAS BG ================== */
+#bg{
+  position:fixed; inset:0; z-index:-1;
+}
+
+/* ================== LOADER ================== */
 #loader{
- position:fixed;inset:0;background:#020617;
- display:flex;flex-direction:column;align-items:center;justify-content:center;
- z-index:9999;transition:.4s;
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center; flex-direction:column;
+  background:#020617;
+  transition:opacity .4s ease;
 }
-.bar{width:220px;height:6px;background:#111;border-radius:8px;overflow:hidden;margin-top:10px}
-.bar i{display:block;height:100%;width:0;background:var(--gold);transition:.3s}
+.spinner{
+  width:64px;height:64px;border-radius:50%;
+  border:4px solid rgba(255,255,255,.1);
+  border-top-color:var(--cyan);
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{margin-top:12px;color:var(--muted)}
 
-/* NAV */
+/* ================== NAV ================== */
 nav{
- display:flex;align-items:center;justify-content:space-between;
- padding:14px 16px;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);
- position:sticky;top:0;z-index:5;border-bottom:1px solid rgba(255,255,255,.06);
+  position:sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:14px 16px;
+  background:rgba(0,0,0,.5);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
-.brand{color:var(--gold);font-weight:800}
-.menu a{margin:0 8px;color:var(--text);text-decoration:none}
-.menu a:hover{color:var(--gold)}
-.wallet{color:var(--gold);font-weight:700}
-
-/* HERO */
-.hero{padding:40px 16px;text-align:center}
-.hero h1{margin:0;color:var(--gold)}
-.hero p{margin:6px 0;color:var(--muted)}
-
-/* BUTTON */
-.btn{
- display:inline-block;margin:6px;padding:10px 16px;border-radius:10px;
- border:1px solid rgba(255,255,255,.08);
- background:linear-gradient(180deg,#1f2937,#0b1222);
- color:white;cursor:pointer;font-weight:700;
+.brand{font-weight:800; letter-spacing:.5px}
+.brand span{color:var(--cyan); text-shadow:0 0 12px var(--cyan)}
+.menu a{
+  margin:0 8px; text-decoration:none; color:var(--text); font-weight:600;
 }
-.btn:hover{background:var(--gold);color:black}
+.menu a:hover{color:var(--cyan)}
+.wallet{color:var(--cyan); font-weight:700}
 
-/* SECTION */
-.section{padding:30px 16px;text-align:center}
-.grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+/* ================== HERO ================== */
+.hero{
+  text-align:center; padding:60px 16px 30px;
+}
+.hero h1{
+  margin:0; font-size:44px;
+  color:var(--cyan);
+  text-shadow:0 0 16px var(--cyan), 0 0 28px rgba(255,0,255,.6);
+}
+.hero p{color:var(--muted); margin:8px 0}
+
+/* ================== BADGES ================== */
+.badges{margin-top:10px}
+.badge{
+  display:inline-block; margin:6px; padding:6px 12px; border-radius:999px;
+  background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08);
+  font-size:13px;
+}
+.badge.ok{background:rgba(16,185,129,.15); border-color:rgba(16,185,129,.4)}
+.badge.bad{background:rgba(239,68,68,.15); border-color:rgba(239,68,68,.4)}
+
+/* ================== LAYOUT ================== */
+.section{padding:30px 16px}
+.grid{display:flex; flex-wrap:wrap; gap:12px; justify-content:center}
+
+/* ================== CARD ================== */
 .card{
- background:var(--card);border:1px solid rgba(255,255,255,.06);
- border-radius:14px;padding:14px;width:160px;
+  width:170px;
+  background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.25));
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px; padding:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.4);
+  transition:.2s ease;
+}
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 10px 30px rgba(0,0,0,.6), 0 0 20px rgba(34,211,238,.25);
+}
+.card h3{margin:6px 0 4px}
+.price{color:var(--muted); font-size:13px}
+
+/* ================== BUTTON ================== */
+.btn{
+  display:inline-block; margin-top:10px; padding:10px 14px;
+  border-radius:999px; border:1px solid rgba(255,255,255,.1);
+  background:linear-gradient(45deg, var(--cyan), var(--pink));
+  color:black; font-weight:800; cursor:pointer;
+}
+.btn.secondary{
+  background:linear-gradient(180deg,#1f2937,#0b1222);
+  color:white;
+}
+.btn:active{transform:scale(.98)}
+
+/* ================== AUTH ================== */
+#auth{
+  text-align:center; padding:30px 16px;
+}
+.input{
+  padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.1);
+  background:#0b1222; color:white; margin:6px; outline:none;
 }
 
-/* LOGIN */
-#auth{padding:40px 16px;text-align:center}
-input{
- padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
- background:#0b1222;color:white;margin:5px;width:200px;
+/* ================== TABS ================== */
+.tabs{display:flex; justify-content:center; gap:8px; margin-bottom:10px}
+.tab{
+  padding:8px 14px; border-radius:999px; background:#1f2937; cursor:pointer;
+  border:1px solid rgba(255,255,255,.08);
 }
-
-/* TABS */
-.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
-.tab{padding:8px 14px;border-radius:20px;background:#1f2937;cursor:pointer}
-.tab.active{background:var(--gold);color:black}
+.tab.active{background:var(--cyan); color:black}
 .box{
- background:var(--card);border:1px solid rgba(255,255,255,.06);
- border-radius:12px;padding:16px;max-width:520px;margin:auto;
+  max-width:560px; margin:auto;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px; padding:16px; line-height:1.7;
 }
 
-/* ADMIN PANEL */
-#adminPanel{display:none;padding:20px;text-align:center}
-textarea{
- width:90%;max-width:500px;height:100px;
- background:#0b1222;color:white;border-radius:10px;
- border:1px solid rgba(255,255,255,.1);padding:10px;
+/* ================== LIST ================== */
+.list{
+  max-width:560px; margin:10px auto;
+}
+.item{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px; padding:10px; margin:6px 0;
+}
+
+/* ================== FOOTER ================== */
+footer{
+  text-align:center; padding:18px; color:var(--muted);
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+/* small */
+@media (max-width:420px){
+  .card{width:150px}
 }
 </style>
 </head>
 
 <body>
 
+<!-- ============ LOADER ============ -->
 <div id="loader">
-<h2 style="color:var(--gold)">Loading Clouds...</h2>
-<div class="bar"><i id="bar"></i></div>
+  <div class="spinner"></div>
+  <div class="loader-text">Booting Clouds…</div>
 </div>
 
+<!-- ============ BG CANVAS ============ -->
+<canvas id="bg"></canvas>
+
+<!-- ============ NAV ============ -->
 <nav>
-<div class="brand">☁️ CLOUDS</div>
-<div class="menu">
-<a href="#shop">Shop</a>
-<a href="#how">How</a>
-<a href="#inventory">Inventory</a>
-<a href="#adminPanel">Admin</a>
-</div>
-<div class="wallet">💰 <span id="coins">0</span></div>
+  <div class="brand"><span>⚡</span> CLOUDS</div>
+  <div class="menu">
+    <a href="#how">How</a>
+    <a href="#shop">Shop</a>
+    <a href="#inventory">Inventory</a>
+  </div>
+  <div class="wallet">💰 <span id="coins">0</span></div>
 </nav>
 
-<div id="auth">
-<h2>Login / Register</h2>
-<input id="user" placeholder="Username"><br>
-<input id="pass" placeholder="Password" type="password"><br>
-<button class="btn" onclick="login()">Login</button>
-<button class="btn" onclick="register()">Register</button>
-</div>
+<!-- ============ AUTH ============ -->
+<section id="auth">
+  <h2>Login / Register</h2>
+  <input id="username" class="input" placeholder="Username"/>
+  <br/>
+  <input id="password" type="password" class="input" placeholder="Password"/>
+  <br/>
+  <button class="btn secondary" id="btnRegister">Register</button>
+  <button class="btn" id="btnLogin">Login</button>
+</section>
 
+<!-- ============ APP ============ -->
 <div id="app" style="display:none">
 
-<div class="hero">
-<h1>clouds.ps</h1>
-<p id="status">Status...</p>
-<p id="ping"></p>
-<p id="worlds"></p>
-</div>
+  <section class="hero">
+    <h1>clouds.ps</h1>
+    <p>Cyberpunk Network • Stable • Smooth</p>
+    <div class="badges">
+      <span id="status" class="badge">Loading…</span>
+      <span id="ping" class="badge">Ping: -</span>
+      <span id="worlds" class="badge">Worlds: -</span>
+    </div>
+  </section>
 
-<!-- HOW -->
-<div class="section" id="how">
-<h2>How To Play</h2>
-<div class="tabs">
-<div class="tab active" onclick="tab(event,'a')">Android</div>
-<div class="tab" onclick="tab(event,'w')">Windows</div>
-<div class="tab" onclick="tab(event,'i')">iOS</div>
-</div>
-<div class="box" id="howBox"></div>
-</div>
+  <!-- HOW -->
+  <section class="section" id="how">
+    <h2 style="text-align:center">How To Play</h2>
+    <div class="tabs">
+      <div class="tab active" data-tab="a">Android</div>
+      <div class="tab" data-tab="w">Windows</div>
+      <div class="tab" data-tab="i">iOS</div>
+    </div>
+    <div class="box" id="howBox"></div>
+  </section>
 
-<!-- SHOP -->
-<div class="section" id="shop">
-<h2>Role Shop</h2>
-<div class="grid" id="shopList"></div>
-<button class="btn" onclick="addCoins()">+1000 Coins</button>
-</div>
+  <!-- SHOP -->
+  <section class="section" id="shop">
+    <h2 style="text-align:center">Role Shop</h2>
+    <div class="grid" id="shopGrid"></div>
+    <div style="text-align:center">
+      <button class="btn secondary" id="btnAddCoins">+1000 Coins (Test)</button>
+    </div>
+  </section>
 
-<!-- INVENTORY -->
-<div class="section" id="inventory">
-<h2>Inventory</h2>
-<div class="grid" id="inv"></div>
-</div>
+  <!-- INVENTORY -->
+  <section class="section" id="inventory">
+    <h2 style="text-align:center">Inventory</h2>
+    <div class="list" id="invList"></div>
+  </section>
 
-<!-- ADMIN -->
-<div id="adminPanel">
-<h2>Admin Panel</h2>
-<input id="code" placeholder="Enter Code">
-<button class="btn" onclick="unlock()">Enter</button>
-<div id="adminContent" style="display:none">
-<h3>Give Coins</h3>
-<input id="target" placeholder="Username">
-<textarea id="amount" placeholder="Coins amount"></textarea><br>
-<button class="btn" onclick="give()">Give</button>
-</div>
-</div>
-
+  <footer>© 2026 CLOUDS — Cyberpunk Mode</footer>
 </div>
 
 <script>
-// LOADER
-let p=0;let bar=document.getElementById("bar");
-let t=setInterval(()=>{
- p+=10;bar.style.width=p+"%";
- if(p>=100){clearInterval(t);loader.style.display="none";}
-},60);
+/* ================== SAFE HELPERS ================== */
+const $ = (id)=>document.getElementById(id);
+function safeJSONParse(s, fallback){
+  try{ return JSON.parse(s) }catch{ return fallback }
+}
+function setText(el, txt){ if(el) el.textContent = txt }
 
-// DATA
-let roles=[
-{name:"VIP",price:1000},
-{name:"VIP+",price:3000},
-{name:"Moderator",price:7000},
-{name:"Admin",price:15000},
-{name:"Creator",price:10000},
-{name:"God",price:50000}
+/* ================== LOADER ================== */
+window.addEventListener("load", ()=>{
+  setTimeout(()=>{
+    const l = $("loader");
+    if(l){ l.style.opacity = "0"; setTimeout(()=>l.remove(), 400); }
+  }, 500);
+});
+
+/* ================== PARTICLES ================== */
+(function initParticles(){
+  const c = $("bg");
+  const ctx = c.getContext("2d");
+  function resize(){ c.width = innerWidth; c.height = innerHeight }
+  resize(); addEventListener("resize", resize);
+
+  const P = [];
+  const COUNT = 80;
+  for(let i=0;i<COUNT;i++){
+    P.push({
+      x:Math.random()*c.width,
+      y:Math.random()*c.height,
+      vx:(Math.random()-0.5)*0.6,
+      vy:(Math.random()-0.5)*0.6
+    });
+  }
+
+  function frame(){
+    ctx.clearRect(0,0,c.width,c.height);
+    // points
+    P.forEach(p=>{
+      ctx.fillStyle = "rgba(34,211,238,0.7)";
+      ctx.fillRect(p.x, p.y, 2, 2);
+    });
+    // lines
+    for(let i=0;i<P.length;i++){
+      for(let j=i+1;j<P.length;j++){
+        const a=P[i], b=P[j];
+        const dx=a.x-b.x, dy=a.y-b.y;
+        const d=Math.hypot(dx,dy);
+        if(d<110){
+          ctx.strokeStyle = "rgba(255,0,255,"+(1-d/110)*0.2+")";
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    // move
+    P.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>c.width) p.vx*=-1;
+      if(p.y<0||p.y>c.height) p.vy*=-1;
+    });
+    requestAnimationFrame(frame);
+  }
+  frame();
+})();
+
+/* ================== STORAGE ================== */
+function getUsers(){
+  return safeJSONParse(localStorage.getItem("users"), {});
+}
+function saveUsers(u){
+  localStorage.setItem("users", JSON.stringify(u));
+}
+
+/* ================== STATE ================== */
+let currentUser = null;
+
+/* ================== AUTH ================== */
+$("btnRegister").onclick = ()=>{
+  const u = $("username").value.trim();
+  const p = $("password").value;
+  if(!u || !p) return alert("Isi username & password");
+  const users = getUsers();
+  if(users[u]) return alert("User sudah ada");
+  users[u] = { password:p, coins:1000, inv:[] };
+  saveUsers(users);
+  alert("Register berhasil");
+};
+
+$("btnLogin").onclick = ()=>{
+  const u = $("username").value.trim();
+  const p = $("password").value;
+  const users = getUsers();
+  if(!users[u]) return alert("User tidak ada");
+  if(users[u].password !== p) return alert("Password salah");
+
+  currentUser = u;
+  $("auth").style.display = "none";
+  $("app").style.display = "block";
+  loadUser();
+};
+
+/* ================== USER ================== */
+function loadUser(){
+  const users = getUsers();
+  const data = users[currentUser];
+  setText($("coins"), data.coins);
+  renderShop();
+  renderInv();
+}
+
+$("btnAddCoins").onclick = ()=>{
+  const users = getUsers();
+  users[currentUser].coins += 1000;
+  saveUsers(users);
+  loadUser();
+};
+
+/* ================== SHOP ================== */
+const ROLES = [
+  {name:"VIP", price:1000},
+  {name:"VIP+", price:3000},
+  {name:"Moderator", price:7000},
+  {name:"Admin", price:15000},
+  {name:"Creator", price:10000},
+  {name:"God", price:50000}
 ];
 
-let u=null,coins=0,inv=[];
-
-// REGISTER
-function register(){
- let name=user.value,passw=pass.value;
- if(!name||!passw)return alert("isi semua");
- localStorage.setItem(name+"_pass",passw);
- alert("registered");
+function buyRole(r){
+  const users = getUsers();
+  const data = users[currentUser];
+  if(data.coins < r.price) return alert("Coins tidak cukup");
+  data.coins -= r.price;
+  data.inv.push(r.name);
+  saveUsers(users);
+  loadUser();
 }
 
-// LOGIN
-function login(){
- let name=user.value,passw=pass.value;
- if(localStorage.getItem(name+"_pass")!==passw) return alert("wrong");
- u=name;
- coins=parseInt(localStorage.getItem(u+"_coins")||1000);
- inv=JSON.parse(localStorage.getItem(u+"_inv")||"[]");
- auth.style.display="none";
- app.style.display="block";
- update();renderShop();renderInv();
-}
-
-// UPDATE
-function update(){
- coinsEl.innerText=coins;
- localStorage.setItem(u+"_coins",coins);
- localStorage.setItem(u+"_inv",JSON.stringify(inv));
-}
-
-// ADD
-function addCoins(){coins+=1000;update();}
-
-// BUY
-function buy(r){
- if(coins>=r.price){
- coins-=r.price;inv.push(r.name);
- update();renderInv();
- }else alert("not enough");
-}
-
-// SHOP
 function renderShop(){
- shopList.innerHTML="";
- roles.forEach(r=>{
- let d=document.createElement("div");
- d.className="card";
- d.innerHTML=`<h3>${r.name}</h3><p>${r.price}</p>`;
- let b=document.createElement("button");
- b.className="btn";b.innerText="Buy";
- b.onclick=()=>buy(r);
- d.appendChild(b);
- shopList.appendChild(d);
- });
+  const wrap = $("shopGrid");
+  wrap.innerHTML = "";
+  ROLES.forEach(r=>{
+    const d = document.createElement("div");
+    d.className = "card";
+    d.innerHTML = `
+      <h3>${r.name}</h3>
+      <div class="price">${r.price} Coins</div>
+    `;
+    const b = document.createElement("button");
+    b.className = "btn";
+    b.textContent = "Buy";
+    b.onclick = ()=>buyRole(r);
+    d.appendChild(b);
+    wrap.appendChild(d);
+  });
 }
 
-// INV
+/* ================== INVENTORY ================== */
 function renderInv(){
- invEl.innerHTML="";
- inv.forEach(i=>{
- let d=document.createElement("div");
- d.className="card";d.innerText=i;
- invEl.appendChild(d);
- });
+  const list = $("invList");
+  list.innerHTML = "";
+  const users = getUsers();
+  const data = users[currentUser];
+  if(!data.inv.length){
+    list.innerHTML = `<div class="item">Kosong</div>`;
+    return;
+  }
+  data.inv.forEach(i=>{
+    const el = document.createElement("div");
+    el.className = "item";
+    el.textContent = i;
+    list.appendChild(el);
+  });
 }
 
-// TABS
-function tab(e,t){
- document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
- e.target.classList.add("active");
- if(t==="a") howBox.innerHTML="Install PowerTunnel → paste host";
- if(t==="w") howBox.innerHTML="Edit hosts file → paste";
- if(t==="i") howBox.innerHTML="Use Surge → import host";
+/* ================== HOW TABS ================== */
+function setHow(tab){
+  const box = $("howBox");
+  if(tab==="a"){
+    box.innerHTML = `
+      1. Install PowerTunnel<br/>
+      2. Copy host clouds.ps<br/>
+      3. Paste ke app<br/>
+      4. Open Growtopia & play
+    `;
+  }
+  if(tab==="w"){
+    box.innerHTML = `
+      1. Open hosts file<br/>
+      2. Paste host clouds.ps<br/>
+      3. Save<br/>
+      4. Open Growtopia
+    `;
+  }
+  if(tab==="i"){
+    box.innerHTML = `
+      1. Install Surge<br/>
+      2. Import URL clouds.ps<br/>
+      3. Enable profile<br/>
+      4. Play
+    `;
+  }
 }
-tab({target:document.querySelector(".tab")},"a");
-
-// ADMIN
-function unlock(){
- if(code.value==="12121212"){
-  adminContent.style.display="block";
- }else alert("wrong code");
-}
-function give(){
- let targetUser=target.value;
- let amount=parseInt(amountEl.value);
- let c=parseInt(localStorage.getItem(targetUser+"_coins")||0);
- c+=amount;
- localStorage.setItem(targetUser+"_coins",c);
- alert("given");
-}
-
-// API
-fetch("https://api.gtps.cloud/g-api/3141/status")
-.then(r=>r.json()).then(d=>{
- status.innerText="Status: "+(d.online?"ONLINE":"OFFLINE");
- ping.innerText="Ping: "+d.ping;
+document.querySelectorAll(".tab").forEach(t=>{
+  t.onclick = (e)=>{
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+    e.currentTarget.classList.add("active");
+    setHow(e.currentTarget.dataset.tab);
+  };
 });
-fetch("https://api.gtps.cloud/g-api/3141/worlds")
-.then(r=>r.json()).then(d=>{
- worlds.innerText="Worlds: "+d.length;
-});
+setHow("a");
+
+/* ================== API ================== */
+(async function loadAPI(){
+  try{
+    const s = await fetch("https://api.gtps.cloud/g-api/3141/status").then(r=>r.json());
+    const el = $("status");
+    el.textContent = s.online ? "● ONLINE" : "● OFFLINE";
+    el.classList.add(s.online ? "ok":"bad");
+    setText($("ping"), "Ping: " + (s.ping ?? "-") + " ms");
+  }catch(e){
+    setText($("status"), "API ERROR");
+  }
+
+  try{
+    const w = await fetch("https://api.gtps.cloud/g-api/3141/worlds").then(r=>r.json());
+    setText($("worlds"), "Worlds: " + (w.length ?? "-"));
+  }catch(e){
+    setText($("worlds"), "Worlds: -");
+  }
+})();
 </script>
 
 </body>
