@@ -1,200 +1,205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY GTPS SERVER - Best Private Server Experience</title>
-    <link rel="stylesheet" href="styles.css">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GTPS CLOUDS</title>
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+    font-family:Arial, sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color:white;
+}
+
+/* NAVBAR */
+nav{
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    background:rgba(0,0,0,0.8);
+    padding:15px;
+    position:sticky;
+    top:0;
+}
+
+nav a{
+    color:gold;
+    text-decoration:none;
+    font-weight:bold;
+    transition:0.3s;
+}
+
+nav a:hover{
+    text-shadow:0 0 10px gold;
+}
+
+/* HERO */
+.hero{
+    text-align:center;
+    padding:100px 20px;
+}
+
+.hero h1{
+    font-size:42px;
+    text-shadow:0 0 25px gold;
+}
+
+.hero p{
+    margin-top:10px;
+    color:#ccc;
+}
+
+.btn{
+    margin-top:20px;
+    padding:12px 25px;
+    border:none;
+    border-radius:10px;
+    font-weight:bold;
+    cursor:pointer;
+    background:gold;
+    color:black;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform:scale(1.1);
+    box-shadow:0 0 15px gold;
+}
+
+/* SECTION */
+.section{
+    padding:60px 20px;
+    text-align:center;
+}
+
+/* COMMUNITY */
+.links{
+    margin-top:20px;
+}
+
+.link-btn{
+    display:inline-block;
+    margin:10px;
+    padding:12px 25px;
+    background:#1f2937;
+    border-radius:12px;
+    color:white;
+    text-decoration:none;
+    transition:0.3s;
+}
+
+.link-btn:hover{
+    background:gold;
+    color:black;
+}
+
+/* SHOP */
+.shop{
+    display:flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:20px;
+}
+
+.card{
+    background:#111;
+    padding:20px;
+    width:150px;
+    border-radius:15px;
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 15px gold;
+}
+
+/* HOW */
+.steps{
+    margin-top:15px;
+    line-height:1.8;
+    color:#ccc;
+}
+
+/* FOOTER */
+footer{
+    background:black;
+    text-align:center;
+    padding:20px;
+    margin-top:40px;
+}
+</style>
+
 </head>
+
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="logo">
-                <span class="logo-icon">🌍</span>
-                <span class="logo-text">GTPS</span>
-            </div>
-            <button class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-menu" id="navMenu">
-                <li><a href="#home" class="nav-link">Home</a></li>
-                <li><a href="#shop" class="nav-link">Shop</a></li>
-                <li><a href="#how-to-play" class="nav-link">How To Play</a></li>
-                <li><a href="#community" class="nav-link">Community</a></li>
-            </ul>
-        </div>
-    </nav>
 
-    <!-- Home Section -->
-    <section id="home" class="home">
-        <div class="stars"></div>
-        <div class="home-content">
-            <div class="server-status">
-                <div class="status-indicator online"></div>
-                <span class="status-text">Server Online</span>
-            </div>
-            
-            <h1 class="main-title">MY GTPS SERVER</h1>
-            <p class="subtitle">Best Private Server Experience</p>
-            
-            <div class="player-counter">
-                <span class="counter-label">Players Online:</span>
-                <span class="counter-number" id="playerCount">1,247</span>
-            </div>
-            
-            <div class="button-group">
-                <button class="btn btn-primary" onclick="showNotification('Download started! Check your downloads folder.')">
-                    📥 Download
-                </button>
-                <button class="btn btn-secondary" onclick="showNotification('Launching game... (Demo)')">
-                    ▶️ Play Now
-                </button>
-            </div>
+<nav>
+<a href="#">Home</a>
+<a href="#shop">Shop</a>
+<a href="#how">How To Play</a>
+<a href="#community">Community</a>
+</nav>
 
-            <div class="floating-items">
-                <div class="item item-1">💎</div>
-                <div class="item item-2">🔐</div>
-                <div class="item item-3">✨</div>
-                <div class="item item-4">🎁</div>
-            </div>
-        </div>
-    </section>
+<div class="hero">
+<h1>🔥 GTPS CLOUDS 🔥</h1>
+<p>Better Economy • Better Experience</p>
 
-    <!-- Shop Section -->
-    <section id="shop" class="shop">
-        <h2 class="section-title">Shop</h2>
-        <p class="section-subtitle">Get the best items for your adventure</p>
-        
-        <div class="shop-grid">
-            <!-- Item 1 -->
-            <div class="shop-item">
-                <div class="item-image">🔐</div>
-                <h3 class="item-name">World Lock</h3>
-                <p class="item-description">Protect your world from intruders</p>
-                <div class="item-price">250 💰</div>
-                <button class="btn-buy" onclick="addToCart('World Lock', 250)">Buy Now</button>
-            </div>
+<button class="btn">Download</button>
+<button class="btn">Play Now</button>
+</div>
 
-            <!-- Item 2 -->
-            <div class="shop-item">
-                <div class="item-image">💎</div>
-                <h3 class="item-name">Diamond Lock</h3>
-                <p class="item-description">Premium world protection</p>
-                <div class="item-price">500 💰</div>
-                <button class="btn-buy" onclick="addToCart('Diamond Lock', 500)">Buy Now</button>
-            </div>
+<div class="section" id="community">
+<h2>Community</h2>
 
-            <!-- Item 3 -->
-            <div class="shop-item">
-                <div class="item-image">✨</div>
-                <h3 class="item-name">Rare Items Pack</h3>
-                <p class="item-description">Exclusive rare items bundle</p>
-                <div class="item-price">1,000 💰</div>
-                <button class="btn-buy" onclick="addToCart('Rare Items Pack', 1000)">Buy Now</button>
-            </div>
+<div class="links">
+<a class="link-btn" href="https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t">WhatsApp</a>
+<a class="link-btn" href="https://discord.gg/Wwve8WcQvM">Discord</a>
+</div>
+</div>
 
-            <!-- Item 4 -->
-            <div class="shop-item">
-                <div class="item-image">⚡</div>
-                <h3 class="item-name">Speed Potion</h3>
-                <p class="item-description">Boost your movement speed</p>
-                <div class="item-price">150 💰</div>
-                <button class="btn-buy" onclick="addToCart('Speed Potion', 150)">Buy Now</button>
-            </div>
+<div class="section" id="shop">
+<h2>Shop</h2>
 
-            <!-- Item 5 -->
-            <div class="shop-item">
-                <div class="item-image">🐣</div>
-                <h3 class="item-name">Pet Egg</h3>
-                <p class="item-description">Hatch your own companion</p>
-                <div class="item-price">800 💰</div>
-                <button class="btn-buy" onclick="addToCart('Pet Egg', 800)">Buy Now</button>
-            </div>
+<div class="shop">
 
-            <!-- Item 6 - Featured -->
-            <div class="shop-item featured">
-                <div class="featured-badge">⭐ Featured</div>
-                <div class="item-image">🎁</div>
-                <h3 class="item-name">Starter Pack</h3>
-                <p class="item-description">Perfect for new players</p>
-                <div class="item-price">299 💰</div>
-                <button class="btn-buy btn-featured" onclick="addToCart('Starter Pack', 299)">Buy Now</button>
-            </div>
-        </div>
-    </section>
+<div class="card">
+<h3>World Lock</h3>
+<p>100 WL</p>
+<button class="btn">Buy</button>
+</div>
 
-    <!-- How To Play Section -->
-    <section id="how-to-play" class="how-to-play">
-        <h2 class="section-title">How To Play</h2>
-        <p class="section-subtitle">Get started in 4 simple steps</p>
-        
-        <div class="steps-container">
-            <div class="step">
-                <div class="step-number">1</div>
-                <h3>Download the Game</h3>
-                <p>Download our GTPS client from the official website. Make sure your device meets the requirements.</p>
-            </div>
+<div class="card">
+<h3>Diamond Lock</h3>
+<p>10 DL</p>
+<button class="btn">Buy</button>
+</div>
 
-            <div class="step-divider">↓</div>
+<div class="card">
+<h3>Rare Item</h3>
+<p>Limited</p>
+<button class="btn">Buy</button>
+</div>
 
-            <div class="step">
-                <div class="step-number">2</div>
-                <h3>Install Host / Connect</h3>
-                <p>Extract the files and run the installer. Select our server from the server list or enter our IP.</p>
-            </div>
+</div>
+</div>
 
-            <div class="step-divider">↓</div>
+<div class="section" id="how">
+<h2>How To Play</h2>
 
-            <div class="step">
-                <div class="step-number">3</div>
-                <h3>Open Growtopia</h3>
-                <p>Launch the game and wait for it to fully load. Check the server status indicator.</p>
-            </div>
+<div class="steps">
+1. Download Growtopia<br>
+2. Install host / connect GTPS<br>
+3. Open Growtopia<br>
+4. Login and play
+</div>
+</div>
 
-            <div class="step-divider">↓</div>
+<footer>
+© 2026 GTPS CLOUDS
+</footer>
 
-            <div class="step">
-                <div class="step-number">4</div>
-                <h3>Login and Play</h3>
-                <p>Create an account or login with your existing credentials. Start exploring and building!</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Community Section -->
-    <section id="community" class="community">
-        <h2 class="section-title">Join Our Community</h2>
-        <p class="section-subtitle">Connect with other players</p>
-        
-        <div class="community-buttons">
-            <a href="https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t" target="_blank" class="community-btn whatsapp">
-                <span class="community-icon">💬</span>
-                <span class="community-name">WhatsApp</span>
-                <span class="community-desc">Chat with players</span>
-            </a>
-            
-            <a href="https://discord.gg/Wwve8WcQvM" target="_blank" class="community-btn discord">
-                <span class="community-icon">🎮</span>
-                <span class="community-name">Discord</span>
-                <span class="community-desc">Join our server</span>
-            </a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2026 MY GTPS SERVER. All rights reserved.</p>
-            <p>Made with ❤️ for the Growtopia community</p>
-        </div>
-    </footer>
-
-    <!-- Notification Toast -->
-    <div class="notification" id="notification"></div>
-
-    <script src="script.js"></script>
 </body>
 </html>
