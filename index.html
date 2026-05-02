@@ -1,298 +1,88 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Clouds — Stable Cyberpunk</title>
-
-<style>
-:root{
-  --bg:#020617;
-  --card:#0b1222;
-  --glass:rgba(255,255,255,.06);
-  --cyan:#22d3ee;
-  --pink:#ff00ff;
-  --text:#e5e7eb;
-  --muted:#9ca3af;
-}
-*{box-sizing:border-box}
-body{
-  margin:0; font-family:system-ui,Arial; color:var(--text);
-  background:linear-gradient(135deg,#020617,#0f172a);
-}
-canvas{position:fixed; inset:0; z-index:-1}
-
-/* NAV */
-nav{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 16px; background:rgba(0,0,0,.6); backdrop-filter:blur(10px);
-}
-.brand{font-weight:800}
-.brand span{color:var(--cyan)}
-.wallet{color:var(--cyan); font-weight:700}
-
-/* HERO */
-.hero{text-align:center; padding:40px 16px}
-.hero h1{
-  color:var(--cyan);
-  text-shadow:0 0 14px var(--cyan), 0 0 24px rgba(255,0,255,.5);
-  margin:0;
-}
-
-/* AUTH */
-#auth{text-align:center; padding:30px}
-.input{
-  padding:10px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.1);
-  background:#0b1222; color:white; margin:6px; outline:none;
-}
-.btn{
-  padding:10px 16px; border-radius:999px; border:1px solid rgba(255,255,255,.1);
-  background:linear-gradient(45deg,var(--cyan),var(--pink));
-  color:black; font-weight:800; cursor:pointer; margin:6px;
-}
-
-/* CARD */
-.section{padding:24px 16px}
-.grid{display:flex; flex-wrap:wrap; gap:12px; justify-content:center}
-.card{
-  width:160px; padding:14px; border-radius:14px;
-  background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(0,0,0,.25));
-  border:1px solid rgba(255,255,255,.08);
-}
-
-/* TABS */
-.tabs{display:flex; justify-content:center; gap:8px}
-.tab{
-  padding:8px 14px; border-radius:999px; background:#1f2937; cursor:pointer;
-}
-.tab.active{background:var(--cyan); color:black}
-.box{
-  max-width:520px; margin:10px auto; padding:14px; border-radius:12px;
-  background:var(--glass);
-}
-.item{
-  background:var(--glass); padding:10px; border-radius:10px; margin:6px;
-}
-
-/* LOADER */
-#loader{
-  position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
-  background:#020617; z-index:9999;
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TEST FIX LOGIN</title>
 </head>
 
-<body>
+<body style="background:#111;color:white;text-align:center;padding:50px;">
 
-<div id="loader">Loading...</div>
-<canvas id="bg"></canvas>
+<h2>Login / Register</h2>
 
-<nav>
-  <div class="brand"><span>⚡</span> CLOUDS</div>
-  <div class="wallet">💰 <span id="coins">0</span></div>
-</nav>
+<input id="username" placeholder="Username"><br><br>
+<input id="password" type="password" placeholder="Password"><br><br>
 
-<!-- AUTH -->
-<div id="auth">
-  <h2>Login / Register</h2>
-  <input id="username" class="input" placeholder="Username"/>
-  <br/>
-  <input id="password" type="password" class="input" placeholder="Password"/>
-  <br/>
-  <button id="btnRegister" class="btn">Register</button>
-  <button id="btnLogin" class="btn">Login</button>
-</div>
+<button id="register">Register</button>
+<button id="login">Login</button>
 
-<!-- APP -->
-<div id="app" style="display:none">
-
-  <div class="hero">
-    <h1>clouds.ps</h1>
-    <p id="status"></p>
-    <p id="ping"></p>
-    <p id="worlds"></p>
-  </div>
-
-  <!-- HOW -->
-  <div class="section">
-    <h2 style="text-align:center">How To Play</h2>
-    <div class="tabs">
-      <div class="tab active" data-tab="a">Android</div>
-      <div class="tab" data-tab="w">Windows</div>
-      <div class="tab" data-tab="i">iOS</div>
-    </div>
-    <div class="box" id="howBox"></div>
-  </div>
-
-  <!-- SHOP -->
-  <div class="section">
-    <h2 style="text-align:center">Shop</h2>
-    <div class="grid" id="shop"></div>
-    <div style="text-align:center">
-      <button id="addCoins" class="btn">+1000 Coins</button>
-    </div>
-  </div>
-
-  <!-- INVENTORY -->
-  <div class="section">
-    <h2 style="text-align:center">Inventory</h2>
-    <div id="inv"></div>
-  </div>
-
+<div id="app" style="display:none;">
+<h1>MASUK BERHASIL ✅</h1>
+<p>Kalau ini muncul berarti login WORK</p>
 </div>
 
 <script>
-/* ========= SAFE UTIL ========= */
-function safeParse(s){
-  try{return JSON.parse(s)||{}}catch{return {}}
-}
+
+// AMBIL USERS
 function getUsers(){
-  return safeParse(localStorage.getItem("users"));
+ let data = localStorage.getItem("users");
+ return data ? JSON.parse(data) : {};
 }
+
+// SIMPAN USERS
 function saveUsers(u){
-  localStorage.setItem("users",JSON.stringify(u));
+ localStorage.setItem("users", JSON.stringify(u));
 }
 
-/* ========= LOADER ========= */
-window.onload=()=>setTimeout(()=>loader.style.display="none",400);
+// REGISTER
+document.getElementById("register").onclick = function(){
+ let u = document.getElementById("username").value;
+ let p = document.getElementById("password").value;
 
-/* ========= PARTICLES ========= */
-(()=>{
-  const c=document.getElementById("bg");
-  const ctx=c.getContext("2d");
-  c.width=innerWidth; c.height=innerHeight;
+ if(!u || !p){
+  alert("Isi semua!");
+  return;
+ }
 
-  let p=[];
-  for(let i=0;i<60;i++){
-    p.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-0.5),vy:(Math.random()-0.5)});
-  }
+ let users = getUsers();
 
-  function loop(){
-    ctx.clearRect(0,0,c.width,c.height);
-    p.forEach(a=>{
-      ctx.fillStyle="cyan";
-      ctx.fillRect(a.x,a.y,2,2);
-      a.x+=a.vx; a.y+=a.vy;
-    });
-    requestAnimationFrame(loop);
-  }
-  loop();
-})();
+ if(users[u]){
+  alert("User sudah ada!");
+  return;
+ }
 
-/* ========= STATE ========= */
-let currentUser=null;
+ users[u] = {
+  password: p,
+  coins: 1000,
+  inv: []
+ };
 
-/* ========= AUTH ========= */
-document.getElementById("btnRegister").addEventListener("click",()=>{
-  const u=username.value.trim();
-  const p=password.value;
-  if(!u||!p)return alert("Isi semua");
+ saveUsers(users);
 
-  let users=getUsers();
-  if(users[u])return alert("User sudah ada");
-
-  users[u]={password:p,coins:1000,inv:[]};
-  saveUsers(users);
-  alert("Register berhasil");
-});
-
-document.getElementById("btnLogin").addEventListener("click",()=>{
-  const u=username.value.trim();
-  const p=password.value;
-  let users=getUsers();
-
-  if(!users[u])return alert("User tidak ada");
-  if(users[u].password!==p)return alert("Password salah");
-
-  currentUser=u;
-  auth.style.display="none";
-  app.style.display="block";
-  loadUser();
-});
-
-/* ========= USER ========= */
-function loadUser(){
-  let d=getUsers()[currentUser];
-  coins.textContent=d.coins;
-  renderShop();
-  renderInv();
-}
-
-document.getElementById("addCoins").onclick=()=>{
-  let users=getUsers();
-  users[currentUser].coins+=1000;
-  saveUsers(users);
-  loadUser();
+ alert("Register berhasil!");
 };
 
-/* ========= SHOP ========= */
-const roles=[
-{name:"VIP",price:1000},
-{name:"VIP+",price:3000},
-{name:"Admin",price:15000},
-{name:"God",price:50000}
-];
+// LOGIN
+document.getElementById("login").onclick = function(){
+ let u = document.getElementById("username").value;
+ let p = document.getElementById("password").value;
 
-function buy(r){
-  let users=getUsers();
-  let d=users[currentUser];
-  if(d.coins<r.price)return alert("Coins kurang");
+ let users = getUsers();
 
-  d.coins-=r.price;
-  d.inv.push(r.name);
-  saveUsers(users);
-  loadUser();
-}
+ if(!users[u]){
+  alert("User tidak ada!");
+  return;
+ }
 
-function renderShop(){
-  shop.innerHTML="";
-  roles.forEach(r=>{
-    let div=document.createElement("div");
-    div.className="card";
-    div.innerHTML=`<h3>${r.name}</h3><p>${r.price}</p>`;
-    let b=document.createElement("button");
-    b.className="btn"; b.textContent="Buy";
-    b.onclick=()=>buy(r);
-    div.appendChild(b);
-    shop.appendChild(div);
-  });
-}
+ if(users[u].password !== p){
+  alert("Password salah!");
+  return;
+ }
 
-/* ========= INVENTORY ========= */
-function renderInv(){
-  let d=getUsers()[currentUser];
-  inv.innerHTML="";
-  d.inv.forEach(i=>{
-    let el=document.createElement("div");
-    el.className="item"; el.textContent=i;
-    inv.appendChild(el);
-  });
-}
+ // MASUK
+ document.getElementById("app").style.display = "block";
 
-/* ========= TABS ========= */
-document.querySelectorAll(".tab").forEach(t=>{
-  t.onclick=e=>{
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-    e.target.classList.add("active");
-    if(e.target.dataset.tab==="a") howBox.innerHTML="Android → PowerTunnel";
-    if(e.target.dataset.tab==="w") howBox.innerHTML="Windows → hosts";
-    if(e.target.dataset.tab==="i") howBox.innerHTML="iOS → Surge";
-  };
-});
-howBox.innerHTML="Android → PowerTunnel";
-
-/* ========= API ========= */
-fetch("https://api.gtps.cloud/g-api/3141/status")
-.then(r=>r.json())
-.then(d=>{
-  status.textContent="Status: "+(d.online?"ONLINE":"OFFLINE");
-  ping.textContent="Ping: "+d.ping;
-}).catch(()=>status.textContent="API ERROR");
-
-fetch("https://api.gtps.cloud/g-api/3141/worlds")
-.then(r=>r.json())
-.then(d=>worlds.textContent="Worlds: "+d.length)
-.catch(()=>worlds.textContent="Worlds: -");
+ alert("Login berhasil!");
+};
 
 </script>
 
