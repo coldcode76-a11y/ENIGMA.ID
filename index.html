@@ -1,204 +1,288 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clouds System</title>
+<title>Clouds GTPS</title>
 
 <style>
+:root{
+ --bg:#020617;
+ --card:#0f172a;
+ --soft:#111827;
+ --gold:#facc15;
+ --text:#e5e7eb;
+ --muted:#9ca3af;
+ --ok:#10b981;
+ --bad:#ef4444;
+}
+*{box-sizing:border-box}
 body{
  margin:0;
- font-family:Arial;
- background:#020617;
- color:white;
+ font-family:system-ui,Arial;
+ background:radial-gradient(circle at top,#0f172a,#020617);
+ color:var(--text);
 }
+
+/* LOADING */
+#loader{
+ position:fixed;inset:0;background:#020617;
+ display:flex;flex-direction:column;align-items:center;justify-content:center;
+ z-index:9999;transition:.4s;
+}
+.bar{width:220px;height:6px;background:#111;border-radius:8px;overflow:hidden;margin-top:10px}
+.bar i{display:block;height:100%;width:0;background:var(--gold);transition:.3s}
 
 /* NAV */
 nav{
- display:flex;
- justify-content:space-between;
- padding:15px;
- background:#111827;
+ display:flex;align-items:center;justify-content:space-between;
+ padding:14px 16px;background:rgba(0,0,0,.6);backdrop-filter:blur(10px);
+ position:sticky;top:0;z-index:5;border-bottom:1px solid rgba(255,255,255,.06);
 }
+.brand{color:var(--gold);font-weight:800}
+.menu a{margin:0 8px;color:var(--text);text-decoration:none}
+.menu a:hover{color:var(--gold)}
+.wallet{color:var(--gold);font-weight:700}
 
-.wallet{color:gold;font-weight:bold}
+/* HERO */
+.hero{padding:40px 16px;text-align:center}
+.hero h1{margin:0;color:var(--gold)}
+.hero p{margin:6px 0;color:var(--muted)}
 
 /* BUTTON */
 .btn{
- margin:5px;
- padding:10px 15px;
- border:none;
- border-radius:10px;
- background:#1f2937;
- color:white;
- cursor:pointer;
+ display:inline-block;margin:6px;padding:10px 16px;border-radius:10px;
+ border:1px solid rgba(255,255,255,.08);
+ background:linear-gradient(180deg,#1f2937,#0b1222);
+ color:white;cursor:pointer;font-weight:700;
 }
+.btn:hover{background:var(--gold);color:black}
 
-.btn:hover{
- background:gold;
- color:black;
-}
-
-/* CARD */
+/* SECTION */
+.section{padding:30px 16px;text-align:center}
+.grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
 .card{
- background:#111827;
- margin:10px;
- padding:15px;
- border-radius:10px;
+ background:var(--card);border:1px solid rgba(255,255,255,.06);
+ border-radius:14px;padding:14px;width:160px;
 }
 
-/* FLEX */
-.flex{
- display:flex;
- flex-wrap:wrap;
- justify-content:center;
+/* LOGIN */
+#auth{padding:40px 16px;text-align:center}
+input{
+ padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);
+ background:#0b1222;color:white;margin:5px;width:200px;
+}
+
+/* TABS */
+.tabs{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+.tab{padding:8px 14px;border-radius:20px;background:#1f2937;cursor:pointer}
+.tab.active{background:var(--gold);color:black}
+.box{
+ background:var(--card);border:1px solid rgba(255,255,255,.06);
+ border-radius:12px;padding:16px;max-width:520px;margin:auto;
+}
+
+/* ADMIN PANEL */
+#adminPanel{display:none;padding:20px;text-align:center}
+textarea{
+ width:90%;max-width:500px;height:100px;
+ background:#0b1222;color:white;border-radius:10px;
+ border:1px solid rgba(255,255,255,.1);padding:10px;
 }
 </style>
 </head>
 
 <body>
 
+<div id="loader">
+<h2 style="color:var(--gold)">Loading Clouds...</h2>
+<div class="bar"><i id="bar"></i></div>
+</div>
+
 <nav>
-<div>☁️ CLOUDS</div>
-<div class="wallet">Coins: <span id="coins">0</span></div>
+<div class="brand">☁️ CLOUDS</div>
+<div class="menu">
+<a href="#shop">Shop</a>
+<a href="#how">How</a>
+<a href="#inventory">Inventory</a>
+<a href="#adminPanel">Admin</a>
+</div>
+<div class="wallet">💰 <span id="coins">0</span></div>
 </nav>
 
-<div id="auth" style="text-align:center; padding:20px;">
+<div id="auth">
 <h2>Login / Register</h2>
-<input id="username" placeholder="Username"><br><br>
-<button class="btn" onclick="login()">Enter</button>
+<input id="user" placeholder="Username"><br>
+<input id="pass" placeholder="Password" type="password"><br>
+<button class="btn" onclick="login()">Login</button>
+<button class="btn" onclick="register()">Register</button>
 </div>
 
 <div id="app" style="display:none">
 
-<div style="text-align:center;">
-<h2>Dashboard</h2>
-<p id="status">Status: ...</p>
-<p id="ping">Ping: ...</p>
-<p id="worlds">Worlds: ...</p>
+<div class="hero">
+<h1>clouds.ps</h1>
+<p id="status">Status...</p>
+<p id="ping"></p>
+<p id="worlds"></p>
 </div>
 
-<div style="text-align:center;">
+<!-- HOW -->
+<div class="section" id="how">
+<h2>How To Play</h2>
+<div class="tabs">
+<div class="tab active" onclick="tab(event,'a')">Android</div>
+<div class="tab" onclick="tab(event,'w')">Windows</div>
+<div class="tab" onclick="tab(event,'i')">iOS</div>
+</div>
+<div class="box" id="howBox"></div>
+</div>
+
+<!-- SHOP -->
+<div class="section" id="shop">
+<h2>Role Shop</h2>
+<div class="grid" id="shopList"></div>
 <button class="btn" onclick="addCoins()">+1000 Coins</button>
 </div>
 
-<h2 style="text-align:center;">Role Shop</h2>
+<!-- INVENTORY -->
+<div class="section" id="inventory">
+<h2>Inventory</h2>
+<div class="grid" id="inv"></div>
+</div>
 
-<div class="flex" id="shop"></div>
-
-<h2 style="text-align:center;">Inventory</h2>
-<div class="flex" id="inventory"></div>
-
-<div style="text-align:center;">
-<button class="btn" onclick="window.open('https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo')">WhatsApp</button>
-<button class="btn" onclick="window.open('https://discord.gg/Wwve8WcQvM')">Discord</button>
+<!-- ADMIN -->
+<div id="adminPanel">
+<h2>Admin Panel</h2>
+<input id="code" placeholder="Enter Code">
+<button class="btn" onclick="unlock()">Enter</button>
+<div id="adminContent" style="display:none">
+<h3>Give Coins</h3>
+<input id="target" placeholder="Username">
+<textarea id="amount" placeholder="Coins amount"></textarea><br>
+<button class="btn" onclick="give()">Give</button>
+</div>
 </div>
 
 </div>
 
 <script>
+// LOADER
+let p=0;let bar=document.getElementById("bar");
+let t=setInterval(()=>{
+ p+=10;bar.style.width=p+"%";
+ if(p>=100){clearInterval(t);loader.style.display="none";}
+},60);
 
 // DATA
-let roles = [
- {name:"VIP",price:1000},
- {name:"VIP+",price:3000},
- {name:"Moderator",price:7000},
- {name:"Admin",price:15000},
- {name:"Community Creator",price:5000},
- {name:"Creator",price:10000},
- {name:"God",price:50000}
+let roles=[
+{name:"VIP",price:1000},
+{name:"VIP+",price:3000},
+{name:"Moderator",price:7000},
+{name:"Admin",price:15000},
+{name:"Creator",price:10000},
+{name:"God",price:50000}
 ];
 
-let user=null;
-let coins=0;
-let inventory=[];
+let u=null,coins=0,inv=[];
+
+// REGISTER
+function register(){
+ let name=user.value,passw=pass.value;
+ if(!name||!passw)return alert("isi semua");
+ localStorage.setItem(name+"_pass",passw);
+ alert("registered");
+}
 
 // LOGIN
 function login(){
- let name=document.getElementById("username").value;
- if(!name)return alert("Masukkan username");
-
- user=name;
-
- coins=parseInt(localStorage.getItem(user+"_coins")||1000);
- inventory=JSON.parse(localStorage.getItem(user+"_inv")||"[]");
-
- document.getElementById("auth").style.display="none";
- document.getElementById("app").style.display="block";
-
- update();
- renderShop();
- renderInv();
+ let name=user.value,passw=pass.value;
+ if(localStorage.getItem(name+"_pass")!==passw) return alert("wrong");
+ u=name;
+ coins=parseInt(localStorage.getItem(u+"_coins")||1000);
+ inv=JSON.parse(localStorage.getItem(u+"_inv")||"[]");
+ auth.style.display="none";
+ app.style.display="block";
+ update();renderShop();renderInv();
 }
 
-// UPDATE UI
+// UPDATE
 function update(){
- document.getElementById("coins").innerText=coins;
- localStorage.setItem(user+"_coins",coins);
- localStorage.setItem(user+"_inv",JSON.stringify(inventory));
+ coinsEl.innerText=coins;
+ localStorage.setItem(u+"_coins",coins);
+ localStorage.setItem(u+"_inv",JSON.stringify(inv));
 }
 
-// ADD COINS
-function addCoins(){
- coins+=1000;
- update();
-}
+// ADD
+function addCoins(){coins+=1000;update();}
 
-// BUY ROLE
-function buy(role){
- if(coins>=role.price){
-  coins-=role.price;
-  inventory.push(role.name);
-  update();
-  renderInv();
-  alert("Berhasil beli "+role.name);
- }else{
-  alert("Coins tidak cukup");
- }
+// BUY
+function buy(r){
+ if(coins>=r.price){
+ coins-=r.price;inv.push(r.name);
+ update();renderInv();
+ }else alert("not enough");
 }
 
 // SHOP
 function renderShop(){
- let shop=document.getElementById("shop");
- shop.innerHTML="";
+ shopList.innerHTML="";
  roles.forEach(r=>{
-  let div=document.createElement("div");
-  div.className="card";
-  div.innerHTML=`
-  <h3>${r.name}</h3>
-  <p>${r.price} Coins</p>
-  <button class="btn">Buy</button>
-  `;
-  div.querySelector("button").onclick=()=>buy(r);
-  shop.appendChild(div);
+ let d=document.createElement("div");
+ d.className="card";
+ d.innerHTML=`<h3>${r.name}</h3><p>${r.price}</p>`;
+ let b=document.createElement("button");
+ b.className="btn";b.innerText="Buy";
+ b.onclick=()=>buy(r);
+ d.appendChild(b);
+ shopList.appendChild(d);
  });
 }
 
-// INVENTORY
+// INV
 function renderInv(){
- let inv=document.getElementById("inventory");
- inv.innerHTML="";
- inventory.forEach(i=>{
-  let div=document.createElement("div");
-  div.className="card";
-  div.innerText=i;
-  inv.appendChild(div);
+ invEl.innerHTML="";
+ inv.forEach(i=>{
+ let d=document.createElement("div");
+ d.className="card";d.innerText=i;
+ invEl.appendChild(d);
  });
+}
+
+// TABS
+function tab(e,t){
+ document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+ e.target.classList.add("active");
+ if(t==="a") howBox.innerHTML="Install PowerTunnel → paste host";
+ if(t==="w") howBox.innerHTML="Edit hosts file → paste";
+ if(t==="i") howBox.innerHTML="Use Surge → import host";
+}
+tab({target:document.querySelector(".tab")},"a");
+
+// ADMIN
+function unlock(){
+ if(code.value==="12121212"){
+  adminContent.style.display="block";
+ }else alert("wrong code");
+}
+function give(){
+ let targetUser=target.value;
+ let amount=parseInt(amountEl.value);
+ let c=parseInt(localStorage.getItem(targetUser+"_coins")||0);
+ c+=amount;
+ localStorage.setItem(targetUser+"_coins",c);
+ alert("given");
 }
 
 // API
 fetch("https://api.gtps.cloud/g-api/3141/status")
-.then(r=>r.json())
-.then(d=>{
- document.getElementById("status").innerText="Status: "+(d.online?"ONLINE":"OFFLINE");
- document.getElementById("ping").innerText="Ping: "+d.ping;
+.then(r=>r.json()).then(d=>{
+ status.innerText="Status: "+(d.online?"ONLINE":"OFFLINE");
+ ping.innerText="Ping: "+d.ping;
 });
-
 fetch("https://api.gtps.cloud/g-api/3141/worlds")
-.then(r=>r.json())
-.then(d=>{
- document.getElementById("worlds").innerText="Worlds: "+d.length;
+.then(r=>r.json()).then(d=>{
+ worlds.innerText="Worlds: "+d.length;
 });
-
 </script>
 
 </body>
