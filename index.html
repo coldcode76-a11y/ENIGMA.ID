@@ -6,40 +6,81 @@
 <title>ENIGMA SERVER</title>
 
 <style>
+*{margin:0;padding:0;box-sizing:border-box}
 body{
- margin:0;
  font-family:Arial;
- background:#1a1a1a;
- color:white;
+ background:#000;
+ color:#fff;
+ overflow-x:hidden;
+}
+
+/* LOADING */
+#loader{
+ position:fixed;
+ width:100%;
+ height:100%;
+ background:#000;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ z-index:999;
+ font-size:25px;
+ color:#FFD700;
+ letter-spacing:3px;
+}
+
+/* PARTICLE */
+canvas{
+ position:fixed;
+ top:0;
+ left:0;
+ z-index:-1;
 }
 
 /* NAV */
 .nav{
  display:flex;
  justify-content:space-around;
- background:#2b2b2b;
- padding:10px;
+ padding:12px;
+ background:rgba(0,0,0,0.6);
+ backdrop-filter:blur(10px);
+ position:sticky;
+ top:0;
 }
 .nav button{
- background:#444;
- border:none;
+ background:#111;
+ border:1px solid #333;
  padding:10px;
  color:white;
- border-radius:8px;
+ border-radius:10px;
+}
+.nav button:hover{
+ background:#FFD700;
+ color:black;
 }
 
-/* PAGE */
-.page{display:none;padding:15px}
-.active{display:block}
+/* PAGE ANIMATION */
+.page{
+ display:none;
+ padding:20px;
+ opacity:0;
+ transform:translateY(20px);
+ transition:0.4s;
+}
+.active{
+ display:block;
+ opacity:1;
+ transform:translateY(0);
+}
 
-/* BOX */
+/* CARD */
 .box{
- background:#2e2e2e;
- border:3px solid #555;
- padding:15px;
- border-radius:10px;
+ background:rgba(20,20,20,0.8);
+ border-radius:15px;
+ padding:20px;
  margin-bottom:15px;
  text-align:center;
+ box-shadow:0 0 25px rgba(255,215,0,0.15);
 }
 
 /* BUTTON */
@@ -47,12 +88,17 @@ body{
  display:block;
  width:100%;
  padding:14px;
- margin:6px 0;
- background:#ffcc00;
- color:black;
+ margin:8px 0;
  border:none;
- border-radius:8px;
+ border-radius:12px;
+ background:linear-gradient(45deg,#FFD700,#fff);
+ color:black;
  font-weight:bold;
+ transition:0.2s;
+}
+.btn:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 15px gold;
 }
 
 /* INPUT */
@@ -60,41 +106,48 @@ input{
  width:100%;
  padding:12px;
  margin:5px 0;
- border-radius:8px;
+ border-radius:10px;
  border:none;
+ background:#222;
+ color:white;
 }
 
-/* FLOAT LOGO */
+/* LOGO */
 .logo{
- width:120px;
+ width:130px;
  animation:float 3s infinite;
+ filter:drop-shadow(0 0 20px gold);
 }
 @keyframes float{
- 50%{transform:translateY(-10px)}
+ 50%{transform:translateY(-15px)}
 }
 
-/* COOKIE */
-#cookie{
+/* CURSOR */
+.cursor{
  position:fixed;
- bottom:0;
- width:100%;
- background:black;
- padding:10px;
- text-align:center;
+ width:15px;
+ height:15px;
+ background:gold;
+ border-radius:50%;
+ pointer-events:none;
+ filter:blur(6px);
 }
 </style>
-
 </head>
+
 <body>
 
+<div id="loader">ENIGMA LOADING...</div>
+<canvas id="bg"></canvas>
+<div class="cursor" id="cursor"></div>
+
 <div class="nav">
-<button onclick="show('home')">Home</button>
-<button onclick="show('how')">Play</button>
-<button onclick="show('login')">Login</button>
-<button onclick="show('register')">Register</button>
-<button onclick="show('chat')">Chat</button>
-<button onclick="show('shop')">Shop</button>
-<button onclick="show('search')">Item</button>
+<button onclick="navClick('home')">Home</button>
+<button onclick="navClick('play')">Play</button>
+<button onclick="navClick('account')">Account</button>
+<button onclick="navClick('chat')">Chat</button>
+<button onclick="navClick('shop')">Shop</button>
+<button onclick="navClick('tools')">Tools</button>
 </div>
 
 <!-- HOME -->
@@ -107,15 +160,22 @@ input{
 </div>
 </div>
 
+<!-- PLAY -->
+<div id="play" class="page">
+<div class="box">
+<button class="btn" onclick="show('how')">How To Play</button>
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/android/3141')">Download Host</button>
+</div>
+</div>
+
 <!-- HOW -->
 <div id="how" class="page">
 <div class="box">
 <h3>ANDROID</h3>
-<button class="btn" onclick="window.open('https://powertunnel.id.uptodown.com/android')">Download PowerTunnel</button>
-<button class="btn" onclick="window.open('https://dash.gtps.cloud/android/3141')">Host Android</button>
+<button class="btn" onclick="window.open('https://powertunnel.id.uptodown.com/android')">Download</button>
 
 <h3>IOS</h3>
-<button class="btn" onclick="window.open('https://dash.gtps.cloud/ios/3141')">Import iOS</button>
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/ios/3141')">Import</button>
 
 <h3>WINDOWS</h3>
 <pre>
@@ -125,23 +185,14 @@ input{
 </div>
 </div>
 
-<!-- REGISTER -->
-<div id="register" class="page">
+<!-- ACCOUNT -->
+<div id="account" class="page">
 <div class="box">
-<h3>REGISTER</h3>
 <input id="ruser" placeholder="Username">
-<input id="remail" placeholder="Email">
 <input id="rpass" placeholder="Password">
 <button class="btn" onclick="register()">Register</button>
-</div>
-</div>
-
-<!-- LOGIN -->
-<div id="login" class="page">
-<div class="box">
-<h3>LOGIN</h3>
-<input id="luser">
-<input id="lpass">
+<input id="luser" placeholder="Username">
+<input id="lpass" placeholder="Password">
 <button class="btn" onclick="login()">Login</button>
 <p id="loginInfo"></p>
 </div>
@@ -150,7 +201,6 @@ input{
 <!-- CHAT -->
 <div id="chat" class="page">
 <div class="box">
-<h3>GLOBAL CHAT</h3>
 <input id="msg">
 <button class="btn" onclick="sendMsg()">Send</button>
 <div id="chatBox"></div>
@@ -160,31 +210,38 @@ input{
 <!-- SHOP -->
 <div id="shop" class="page">
 <div class="box">
-<h3>SHOP</h3>
 <p>Balance: <span id="bal">0</span></p>
 <button class="btn" onclick="buy()">Buy VIP</button>
 </div>
 </div>
 
-<!-- ITEM SEARCH -->
-<div id="search" class="page">
+<!-- TOOLS -->
+<div id="tools" class="page">
 <div class="box">
-<h3>ITEM SEARCH</h3>
-<input id="itemID" placeholder="Item ID">
-<button class="btn" onclick="searchItem()">Search</button>
+<input id="itemID">
+<button class="btn" onclick="searchItem()">Search Item</button>
 <img id="itemImg" width="100">
 </div>
 </div>
 
-<!-- COOKIE -->
-<div id="cookie">
-<p>This website uses cookies</p>
-<button onclick="cookie.style.display='none'">Allow</button>
-</div>
+<audio id="clickSound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3"></audio>
 
 <script>
 
+// LOADER
+setTimeout(()=>loader.style.display="none",1500);
+
+// SOUND
+function playSound(){
+ document.getElementById("clickSound").play();
+}
+
 // NAV
+function navClick(p){
+ playSound();
+ show(p);
+}
+
 function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
@@ -201,21 +258,19 @@ setInterval(load,5000); load();
 
 // REGISTER
 function register(){
- let users=JSON.parse(localStorage.getItem("users")||"{}");
- users[ruser.value]={pass:rpass.value,email:remail.value,bal:100};
- localStorage.setItem("users",JSON.stringify(users));
+ let u=JSON.parse(localStorage.getItem("users")||"{}");
+ u[ruser.value]={pass:rpass.value,bal:100};
+ localStorage.setItem("users",JSON.stringify(u));
  alert("Registered");
 }
 
 // LOGIN
 function login(){
- let users=JSON.parse(localStorage.getItem("users")||"{}");
- if(users[luser.value] && users[luser.value].pass==lpass.value){
+ let u=JSON.parse(localStorage.getItem("users")||"{}");
+ if(u[luser.value] && u[luser.value].pass==lpass.value){
   localStorage.setItem("user",luser.value);
-  loginInfo.innerHTML="Login success";
+  loginInfo.innerHTML="Success";
   updateUser();
- } else {
-  loginInfo.innerHTML="Wrong";
  }
 }
 
@@ -230,10 +285,10 @@ updateUser();
 
 // CHAT
 function sendMsg(){
- let data=JSON.parse(localStorage.getItem("chat")||"[]");
- data.push(msg.value);
- localStorage.setItem("chat",JSON.stringify(data));
- chatBox.innerHTML=data.map(x=>"<p>"+x+"</p>").join("");
+ let d=JSON.parse(localStorage.getItem("chat")||"[]");
+ d.push(msg.value);
+ localStorage.setItem("chat",JSON.stringify(d));
+ chatBox.innerHTML=d.map(x=>"<p>"+x+"</p>").join("");
 }
 
 // SHOP
@@ -245,10 +300,41 @@ function buy(){
  updateUser();
 }
 
-// ITEM SEARCH
+// ITEM
 function searchItem(){
  itemImg.src="https://api.gtps.cloud/api/item/texture/3141/"+itemID.value;
 }
+
+// PARTICLE
+const c=document.getElementById("bg");
+const ctx=c.getContext("2d");
+c.width=window.innerWidth;
+c.height=window.innerHeight;
+
+let p=[];
+for(let i=0;i<80;i++){
+ p.push({x:Math.random()*c.width,y:Math.random()*c.height,dx:Math.random()-0.5,dy:Math.random()-0.5});
+}
+
+function draw(){
+ ctx.clearRect(0,0,c.width,c.height);
+ ctx.fillStyle="gold";
+ p.forEach(a=>{
+  ctx.beginPath();
+  ctx.arc(a.x,a.y,2,0,Math.PI*2);
+  ctx.fill();
+  a.x+=a.dx;
+  a.y+=a.dy;
+ });
+ requestAnimationFrame(draw);
+}
+draw();
+
+// CURSOR
+document.addEventListener("mousemove",e=>{
+ cursor.style.left=e.clientX+"px";
+ cursor.style.top=e.clientY+"px";
+});
 
 </script>
 
