@@ -1,209 +1,316 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ENIGMA SERVER</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
- font-family:'Segoe UI',sans-serif;
- background:#000;
- color:white;
- overflow-x:hidden;
-}
-
-/* LOADING */
-#loader{
- position:fixed;
- width:100%;
- height:100%;
- background:#000;
- display:flex;
- justify-content:center;
- align-items:center;
- z-index:999;
- font-size:25px;
- letter-spacing:3px;
- color:#FFD700;
-}
+body{margin:0;font-family:sans-serif;background:#000;color:#fff}
 
 /* NAV */
 .nav{
  display:flex;
- justify-content:space-between;
- padding:15px 30px;
- background:rgba(0,0,0,0.6);
- backdrop-filter:blur(10px);
- position:fixed;
- width:100%;
- z-index:10;
+ gap:10px;
+ overflow:auto;
+ padding:10px;
+ background:#111;
 }
-.nav h1{color:#FFD700}
 .nav button{
- background:none;border:none;color:white;margin-left:15px;cursor:pointer;
+ background:#222;
+ border:none;
+ color:white;
+ padding:8px 12px;
+ border-radius:8px;
+ cursor:pointer;
 }
 
-/* HERO */
-.hero{
- height:100vh;
- display:flex;
- flex-direction:column;
- justify-content:center;
- align-items:center;
- text-align:center;
-}
-
-.hero img{
- width:200px;
- animation:float 3s infinite;
-}
-@keyframes float{
- 0%{transform:translateY(0)}
- 50%{transform:translateY(-10px)}
- 100%{transform:translateY(0)}
-}
-
-.title{
- font-size:50px;
- background:linear-gradient(45deg,#FFD700,#fff);
- -webkit-background-clip:text;
- color:transparent;
-}
-
-.slogan{
- opacity:0.7;
- margin:10px 0;
-}
+/* PAGE */
+.page{display:none;padding:20px}
+.active{display:block}
 
 /* CARD */
 .card{
- background:rgba(20,20,20,0.7);
- border-radius:20px;
- padding:25px;
- margin:20px;
- backdrop-filter:blur(10px);
- box-shadow:0 0 30px rgba(255,215,0,0.2);
+ background:#111;
+ padding:20px;
+ border-radius:15px;
+ margin:10px auto;
+ max-width:500px;
+ text-align:center;
+ box-shadow:0 0 10px rgba(255,255,255,0.1);
 }
 
-/* STATUS BAR */
-.bar{
- height:8px;
- background:#222;
+input{
+ width:90%;
+ padding:10px;
+ margin:5px;
  border-radius:10px;
- overflow:hidden;
- margin:10px 0;
-}
-.fill{
- height:100%;
- background:#FFD700;
- width:0%;
+ border:none;
 }
 
-/* BUTTON */
-.btn{
- display:inline-block;
- padding:12px 20px;
- margin:10px;
- border-radius:30px;
- text-decoration:none;
- font-weight:bold;
- color:white;
- transition:0.2s;
+button{
+ padding:10px;
+ border:none;
+ border-radius:10px;
+ cursor:pointer;
 }
-.btn:hover{transform:scale(1.05)}
-.discord{background:#5865F2}
-.whatsapp{background:#25D366}
 
-/* PAGE */
-.page{display:none}
-.active{display:block}
+pre{
+ background:#000;
+ padding:10px;
+ border-radius:10px;
+ text-align:left;
+}
+
+.role{color:gold}
 </style>
 </head>
 
 <body>
 
-<div id="loader">ENIGMA LOADING...</div>
-
 <div class="nav">
-<h1>ENIGMA</h1>
-<div>
-<button onclick="showPage('home')">Home</button>
-<button onclick="showPage('how')">How</button>
-<button onclick="showPage('community')">Community</button>
-</div>
+<button onclick="show('home')">Home</button>
+<button onclick="show('how')">How To Play</button>
+<button onclick="show('login')">GrowID</button>
+<button onclick="show('chat')">Chat</button>
+<button onclick="show('shop')">Shop</button>
+<button onclick="show('role')">Role</button>
+<button onclick="show('ticket')">Support</button>
+<button onclick="show('admin')">Admin</button>
 </div>
 
 <!-- HOME -->
-<div id="home" class="page active hero">
-<img src="https://i.postimg.cc/F1fQdYVv/file-000000002e0c71fab5230bc42b5b3130.png">
-<div class="title">ENIGMA</div>
-<div class="slogan">🔥 Ultimate Freedom Private Server</div>
-
+<div id="home" class="page active">
 <div class="card">
-<div id="status">Loading...</div>
-<div id="players">Players: 0</div>
+<h2>🔥 ENIGMA SERVER</h2>
+<p><b>No Rules. No Limits. Just ENIGMA.</b></p>
 
-<div class="bar"><div id="barFill" class="fill"></div></div>
+<div id="status">Loading...</div>
+<div id="players">0</div>
 
 <p>IP: 91.134.85.13:17091</p>
-
-<a class="btn whatsapp" href="https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t">JOIN</a>
 </div>
 </div>
 
-<!-- HOW -->
+<!-- HOW TO PLAY -->
 <div id="how" class="page">
 <div class="card">
-<h2>HOW TO PLAY</h2>
-<p>Download PowerTunnel / Virtual Host</p>
-<p>Masukkan host lalu buka Growtopia</p>
+<h2>📖 HOW TO PLAY</h2>
+
+<h3>📱 Android</h3>
+<p>1. Install PowerTunnel / Virtual Host</p>
+<p>2. Gunakan host di bawah</p>
+
+<a href="https://powertunnel.id.uptodown.com/android">Download PowerTunnel</a><br>
+<a href="https://www.apkmirror.com/apk/xfalcon/virtual-hosts/virtual-hosts-2-1-0-release/virtual-hosts-2-1-0-android-apk-download/">Download Virtual Host</a>
+
+<br><br>
+
+<h3>🍎 iOS</h3>
+<a href="https://dash.gtps.cloud/ios/3141">Import Config</a>
+
+<br><br>
+
+<h3>💻 PC / Mac</h3>
+<pre>
+91.134.85.13 growtopia1.com
+91.134.85.13 growtopia2.com
+91.134.85.13 www.growtopia1.com
+91.134.85.13 www.growtopia2.com
+</pre>
+
+<p>Setelah itu buka Growtopia 🚀</p>
 </div>
 </div>
 
-<!-- COMMUNITY -->
-<div id="community" class="page">
+<!-- LOGIN -->
+<div id="login" class="page">
 <div class="card">
-<h2>COMMUNITY</h2>
-<a class="btn whatsapp" href="https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t">JOIN WHATSAPP</a>
+<h2>👤 GROWID LOGIN</h2>
+
+<input id="user" placeholder="Username">
+
+<button onclick="login()">Login</button>
+
+<p id="userInfo"></p>
+</div>
+</div>
+
+<!-- CHAT -->
+<div id="chat" class="page">
+<div class="card">
+<h2>💬 GLOBAL CHAT</h2>
+
+<input id="msg" placeholder="Ketik pesan...">
+<button onclick="sendMsg()">Send</button>
+
+<div id="chatBox"></div>
+</div>
+</div>
+
+<!-- SHOP -->
+<div id="shop" class="page">
+<div class="card">
+<h2>💎 SHOP</h2>
+
+<p>Balance: <span id="bal">0</span></p>
+
+<button onclick="buyVIP()">Buy VIP (10)</button>
+<button onclick="buyDL()">Buy 50 DL (5)</button>
+
+</div>
+</div>
+
+<!-- ROLE -->
+<div id="role" class="page">
+<div class="card">
+<h2>👑 ROLE</h2>
+
+<p id="roleText">Role: Member</p>
+
+</div>
+</div>
+
+<!-- SUPPORT -->
+<div id="ticket" class="page">
+<div class="card">
+<h2>🎫 SUPPORT</h2>
+
+<input id="ticketMsg" placeholder="Masalah lu">
+<button onclick="sendTicket()">Send</button>
+
+<div id="tickets"></div>
+</div>
+</div>
+
+<!-- ADMIN -->
+<div id="admin" class="page">
+<div class="card">
+<h2>🛠 ADMIN PANEL</h2>
+
+<input id="adminCode" placeholder="Enter Code">
+<button onclick="adminLogin()">Enter</button>
+
+<div id="adminPanel" style="display:none">
+
+<h3>Set Balance</h3>
+<input id="targetUser" placeholder="Username">
+<input id="amount" placeholder="Amount">
+<button onclick="setBalance()">Set</button>
+
+<h3>Tickets</h3>
+<div id="adminTickets"></div>
+
+</div>
 </div>
 </div>
 
 <script>
-// LOADER
-setTimeout(()=>document.getElementById("loader").style.display="none",1500);
 
-// PAGE
-function showPage(p){
+// NAV
+function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
 }
 
 // API
-async function loadServer(){
- try{
-  const res=await fetch("https://api.gtps.cloud/api/server/public/3141");
-  const data=await res.json();
+async function load(){
+ const res=await fetch("https://api.gtps.cloud/api/server/public/3141");
+ const d=await res.json();
 
-  let online=data.state.server_status==1;
-  let players=data.state.players_online;
+ status.innerHTML=d.state.server_status==1?"🟢 ONLINE":"🔴 OFFLINE";
+ players.innerHTML="Players: "+d.state.players_online;
+}
+setInterval(load,5000); load();
 
-  document.getElementById("status").innerHTML =
-   online?"🟢 ONLINE":"🔴 OFFLINE";
+// USER SYSTEM
+let currentUser=localStorage.getItem("user");
 
-  document.getElementById("players").innerHTML =
-   "Players: "+players;
+function login(){
+ currentUser=user.value;
+ localStorage.setItem("user",currentUser);
 
-  document.getElementById("barFill").style.width =
-   Math.min(players*2,100)+"%";
+ if(!localStorage.getItem("bal_"+currentUser)){
+  localStorage.setItem("bal_"+currentUser,100);
+  localStorage.setItem("role_"+currentUser,"Member");
+ }
 
- }catch{
-  document.getElementById("status").innerHTML="ERROR";
+ updateUser();
+}
+
+function updateUser(){
+ if(currentUser){
+  userInfo.innerHTML="Logged as "+currentUser;
+  bal.innerHTML=localStorage.getItem("bal_"+currentUser);
+  roleText.innerHTML="Role: "+localStorage.getItem("role_"+currentUser);
  }
 }
-loadServer();
-setInterval(loadServer,4000);
+updateUser();
+
+// CHAT
+function sendMsg(){
+ let data=JSON.parse(localStorage.getItem("chat")||"[]");
+ data.push(currentUser+": "+msg.value);
+ localStorage.setItem("chat",JSON.stringify(data));
+ renderChat();
+}
+function renderChat(){
+ let data=JSON.parse(localStorage.getItem("chat")||"[]");
+ chatBox.innerHTML=data.map(m=>"<p>"+m+"</p>").join("");
+}
+renderChat();
+
+// SHOP
+function buyVIP(){
+ let bal=parseInt(localStorage.getItem("bal_"+currentUser));
+ if(bal>=10){
+  bal-=10;
+  localStorage.setItem("bal_"+currentUser,bal);
+  localStorage.setItem("role_"+currentUser,"VIP");
+  updateUser();
+ }
+}
+
+function buyDL(){
+ let bal=parseInt(localStorage.getItem("bal_"+currentUser));
+ if(bal>=5){
+  bal-=5;
+  localStorage.setItem("bal_"+currentUser,bal);
+  updateUser();
+ }
+}
+
+// TICKET
+function sendTicket(){
+ let t=JSON.parse(localStorage.getItem("tickets")||"[]");
+ t.push(currentUser+": "+ticketMsg.value);
+ localStorage.setItem("tickets",JSON.stringify(t));
+ renderTickets();
+}
+function renderTickets(){
+ let t=JSON.parse(localStorage.getItem("tickets")||"[]");
+ tickets.innerHTML=t.map(x=>"<p>"+x+"</p>").join("");
+}
+renderTickets();
+
+// ADMIN
+function adminLogin(){
+ if(adminCode.value=="3141"){
+  adminPanel.style.display="block";
+  loadAdminTickets();
+ }
+}
+
+function setBalance(){
+ localStorage.setItem("bal_"+targetUser.value,amount.value);
+ alert("Balance updated");
+}
+
+function loadAdminTickets(){
+ let t=JSON.parse(localStorage.getItem("tickets")||"[]");
+ adminTickets.innerHTML=t.map(x=>"<p>"+x+"</p>").join("");
+}
+
 </script>
 
 </body>
