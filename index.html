@@ -6,233 +6,185 @@
 <title>ENIGMA SERVER</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
 body{
- font-family:'Segoe UI',sans-serif;
- background:#000;
- color:#fff;
- overflow-x:hidden;
-}
-
-/* LOADING */
-#loader{
- position:fixed;
- width:100%;
- height:100%;
- background:#000;
- display:flex;
- justify-content:center;
- align-items:center;
- z-index:999;
- font-size:30px;
- color:#FFD700;
- letter-spacing:3px;
-}
-
-/* PARTICLE */
-canvas{
- position:fixed;
- top:0;
- left:0;
- z-index:-1;
+ margin:0;
+ font-family:Arial;
+ background:#1a1a1a;
+ color:white;
 }
 
 /* NAV */
 .nav{
- position:fixed;
- width:100%;
  display:flex;
- justify-content:space-between;
- padding:15px 30px;
- background:rgba(0,0,0,0.6);
- backdrop-filter:blur(10px);
- z-index:10;
+ justify-content:space-around;
+ background:#2b2b2b;
+ padding:10px;
 }
-.nav h1{color:#FFD700}
 .nav button{
- background:none;
+ background:#444;
  border:none;
+ padding:10px;
  color:white;
- margin-left:15px;
- cursor:pointer;
+ border-radius:8px;
 }
 
-/* PAGE TRANSITION */
-.page{
- display:none;
- padding-top:100px;
- opacity:0;
- transform:translateY(20px);
- transition:0.5s;
-}
-.active{
- display:block;
- opacity:1;
- transform:translateY(0);
-}
+/* PAGE */
+.page{display:none;padding:15px}
+.active{display:block}
 
-/* HERO */
-.hero{text-align:center;padding:80px 20px}
-.logo{
- width:180px;
- animation:float 3s infinite;
- filter:drop-shadow(0 0 25px gold);
-}
-@keyframes float{
- 0%{transform:translateY(0)}
- 50%{transform:translateY(-20px)}
- 100%{transform:translateY(0)}
-}
-
-.title{
- font-size:55px;
- background:linear-gradient(45deg,#FFD700,#fff);
- -webkit-background-clip:text;
- color:transparent;
-}
-
-/* CARD */
-.card{
- background:rgba(20,20,20,0.7);
- padding:25px;
- border-radius:20px;
- margin:20px auto;
- max-width:500px;
- backdrop-filter:blur(10px);
- box-shadow:0 0 40px rgba(255,215,0,0.2);
+/* BOX */
+.box{
+ background:#2e2e2e;
+ border:3px solid #555;
+ padding:15px;
+ border-radius:10px;
+ margin-bottom:15px;
+ text-align:center;
 }
 
 /* BUTTON */
 .btn{
  display:block;
- padding:12px;
- margin:10px 0;
- border-radius:30px;
- text-align:center;
- text-decoration:none;
- font-weight:bold;
- color:white;
- background:#FFD700;
+ width:100%;
+ padding:14px;
+ margin:6px 0;
+ background:#ffcc00;
  color:black;
- transition:0.3s;
-}
-.btn:hover{
- transform:scale(1.05);
- box-shadow:0 0 25px gold;
+ border:none;
+ border-radius:8px;
+ font-weight:bold;
 }
 
 /* INPUT */
 input{
  width:100%;
  padding:12px;
- margin:6px 0;
- border-radius:10px;
+ margin:5px 0;
+ border-radius:8px;
  border:none;
- background:#222;
- color:white;
 }
 
-/* MOUSE GLOW */
-.cursor{
+/* FLOAT LOGO */
+.logo{
+ width:120px;
+ animation:float 3s infinite;
+}
+@keyframes float{
+ 50%{transform:translateY(-10px)}
+}
+
+/* COOKIE */
+#cookie{
  position:fixed;
- width:20px;
- height:20px;
- background:gold;
- border-radius:50%;
- pointer-events:none;
- filter:blur(10px);
+ bottom:0;
+ width:100%;
+ background:black;
+ padding:10px;
+ text-align:center;
 }
-
-/* CHAT */
-.chatbox{max-height:200px;overflow:auto;text-align:left}
 </style>
-</head>
 
+</head>
 <body>
 
-<div id="loader">ENIGMA LOADING...</div>
-<canvas id="bg"></canvas>
-<div class="cursor" id="cursor"></div>
-
 <div class="nav">
-<h1>ENIGMA</h1>
-<div>
 <button onclick="show('home')">Home</button>
-<button onclick="show('how')">How</button>
-<button onclick="show('login')">GrowID</button>
+<button onclick="show('how')">Play</button>
+<button onclick="show('login')">Login</button>
+<button onclick="show('register')">Register</button>
 <button onclick="show('chat')">Chat</button>
 <button onclick="show('shop')">Shop</button>
-<button onclick="show('admin')">Admin</button>
-</div>
+<button onclick="show('search')">Item</button>
 </div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-<div class="hero">
+<div class="box">
 <img class="logo" src="https://i.postimg.cc/F1fQdYVv/file-000000002e0c71fab5230bc42b5b3130.png">
-<div class="title">ENIGMA</div>
-<p>🔥 Ultimate Chaos Experience</p>
-</div>
-
-<div class="card">
-<div id="status">Loading...</div>
-<div id="players">0</div>
+<h2>ENIGMA SERVER</h2>
+<p id="status">Loading...</p>
+<p id="players">0</p>
 </div>
 </div>
 
 <!-- HOW -->
 <div id="how" class="page">
-<div class="card">
-<h2>HOW TO PLAY</h2>
-<p>Install PowerTunnel / Virtual Host</p>
+<div class="box">
+<h3>ANDROID</h3>
+<button class="btn" onclick="window.open('https://powertunnel.id.uptodown.com/android')">Download PowerTunnel</button>
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/android/3141')">Host Android</button>
+
+<h3>IOS</h3>
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/ios/3141')">Import iOS</button>
+
+<h3>WINDOWS</h3>
+<pre>
+91.134.85.13 growtopia1.com
+91.134.85.13 growtopia2.com
+</pre>
+</div>
+</div>
+
+<!-- REGISTER -->
+<div id="register" class="page">
+<div class="box">
+<h3>REGISTER</h3>
+<input id="ruser" placeholder="Username">
+<input id="remail" placeholder="Email">
+<input id="rpass" placeholder="Password">
+<button class="btn" onclick="register()">Register</button>
 </div>
 </div>
 
 <!-- LOGIN -->
 <div id="login" class="page">
-<div class="card">
-<h2>LOGIN</h2>
-<input id="user">
+<div class="box">
+<h3>LOGIN</h3>
+<input id="luser">
+<input id="lpass">
 <button class="btn" onclick="login()">Login</button>
-<p id="userInfo"></p>
+<p id="loginInfo"></p>
 </div>
 </div>
 
 <!-- CHAT -->
 <div id="chat" class="page">
-<div class="card">
-<h2>CHAT</h2>
+<div class="box">
+<h3>GLOBAL CHAT</h3>
 <input id="msg">
 <button class="btn" onclick="sendMsg()">Send</button>
-<div class="chatbox" id="chatBox"></div>
+<div id="chatBox"></div>
 </div>
 </div>
 
 <!-- SHOP -->
 <div id="shop" class="page">
-<div class="card">
-<h2>SHOP</h2>
-<button class="btn" onclick="buyVIP()">Buy VIP</button>
+<div class="box">
+<h3>SHOP</h3>
+<p>Balance: <span id="bal">0</span></p>
+<button class="btn" onclick="buy()">Buy VIP</button>
 </div>
 </div>
 
-<!-- ADMIN -->
-<div id="admin" class="page">
-<div class="card">
-<h2>ADMIN</h2>
-<input id="adminCode">
-<button class="btn" onclick="adminLogin()">Enter</button>
-<div id="adminPanel" style="display:none">
-<p>ADMIN MODE</p>
+<!-- ITEM SEARCH -->
+<div id="search" class="page">
+<div class="box">
+<h3>ITEM SEARCH</h3>
+<input id="itemID" placeholder="Item ID">
+<button class="btn" onclick="searchItem()">Search</button>
+<img id="itemImg" width="100">
 </div>
 </div>
+
+<!-- COOKIE -->
+<div id="cookie">
+<p>This website uses cookies</p>
+<button onclick="cookie.style.display='none'">Allow</button>
 </div>
 
 <script>
-// LOADER
-setTimeout(()=>loader.style.display="none",1500);
 
-// PAGE
+// NAV
 function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
@@ -240,64 +192,64 @@ function show(p){
 
 // API
 async function load(){
- const res=await fetch("https://api.gtps.cloud/api/server/public/3141");
- const d=await res.json();
- status.innerHTML=d.state.server_status==1?"🟢 ONLINE":"🔴 OFFLINE";
+ let res=await fetch("https://api.gtps.cloud/api/server/public/3141");
+ let d=await res.json();
+ status.innerHTML=d.state.server_status==1?"ONLINE":"OFFLINE";
  players.innerHTML="Players: "+d.state.players_online;
 }
 setInterval(load,5000); load();
 
+// REGISTER
+function register(){
+ let users=JSON.parse(localStorage.getItem("users")||"{}");
+ users[ruser.value]={pass:rpass.value,email:remail.value,bal:100};
+ localStorage.setItem("users",JSON.stringify(users));
+ alert("Registered");
+}
+
 // LOGIN
 function login(){
- localStorage.setItem("user",user.value);
- userInfo.innerHTML="Logged: "+user.value;
+ let users=JSON.parse(localStorage.getItem("users")||"{}");
+ if(users[luser.value] && users[luser.value].pass==lpass.value){
+  localStorage.setItem("user",luser.value);
+  loginInfo.innerHTML="Login success";
+  updateUser();
+ } else {
+  loginInfo.innerHTML="Wrong";
+ }
 }
+
+// USER
+function updateUser(){
+ let u=localStorage.getItem("user");
+ if(!u)return;
+ let users=JSON.parse(localStorage.getItem("users"));
+ bal.innerHTML=users[u].bal;
+}
+updateUser();
 
 // CHAT
 function sendMsg(){
  let data=JSON.parse(localStorage.getItem("chat")||"[]");
- data.push(user.value+": "+msg.value);
+ data.push(msg.value);
  localStorage.setItem("chat",JSON.stringify(data));
- chatBox.innerHTML=data.map(m=>"<p>"+m+"</p>").join("");
+ chatBox.innerHTML=data.map(x=>"<p>"+x+"</p>").join("");
 }
 
-// ADMIN
-function adminLogin(){
- if(adminCode.value=="3141"){
-  adminPanel.style.display="block";
- }
+// SHOP
+function buy(){
+ let u=localStorage.getItem("user");
+ let users=JSON.parse(localStorage.getItem("users"));
+ users[u].bal-=10;
+ localStorage.setItem("users",JSON.stringify(users));
+ updateUser();
 }
 
-// PARTICLE
-const c=document.getElementById("bg");
-const ctx=c.getContext("2d");
-c.width=window.innerWidth;
-c.height=window.innerHeight;
-
-let p=[];
-for(let i=0;i<100;i++){
- p.push({x:Math.random()*c.width,y:Math.random()*c.height,dx:Math.random()-0.5,dy:Math.random()-0.5});
+// ITEM SEARCH
+function searchItem(){
+ itemImg.src="https://api.gtps.cloud/api/item/texture/3141/"+itemID.value;
 }
 
-function draw(){
- ctx.clearRect(0,0,c.width,c.height);
- ctx.fillStyle="gold";
- p.forEach(a=>{
-  ctx.beginPath();
-  ctx.arc(a.x,a.y,2,0,Math.PI*2);
-  ctx.fill();
-  a.x+=a.dx;
-  a.y+=a.dy;
- });
- requestAnimationFrame(draw);
-}
-draw();
-
-// CURSOR GLOW
-document.addEventListener("mousemove",e=>{
- cursor.style.left=e.clientX+"px";
- cursor.style.top=e.clientY+"px";
-});
 </script>
 
 </body>
