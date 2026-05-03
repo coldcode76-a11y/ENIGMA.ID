@@ -8,25 +8,124 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{
- font-family:Arial;
- background:#000;
- color:white;
+ font-family:'Segoe UI',sans-serif;
+ background:radial-gradient(circle at top,#0a0a0a,#000);
+ color:#fff;
  overflow-x:hidden;
 }
 
-/* LOADER */
-#loader{
- position:fixed;
- width:100%;
- height:100%;
- background:#000;
+/* NAV */
+.nav{
  display:flex;
- justify-content:center;
- align-items:center;
- z-index:999;
- color:#FFD700;
- font-size:25px;
+ justify-content:space-around;
+ padding:15px;
+ background:rgba(0,0,0,0.6);
+ backdrop-filter:blur(12px);
+ border-bottom:1px solid rgba(255,215,0,0.2);
 }
+.nav button{
+ background:transparent;
+ border:1px solid rgba(255,215,0,0.3);
+ padding:10px 14px;
+ color:#FFD700;
+ border-radius:12px;
+ font-weight:bold;
+ transition:0.3s;
+}
+.nav button:hover{
+ background:#FFD700;
+ color:black;
+ box-shadow:0 0 20px gold;
+}
+
+/* PAGE */
+.page{display:none;padding:25px}
+.active{display:block}
+
+/* HERO */
+.hero{
+ text-align:center;
+ margin-top:20px;
+}
+.hero h1{
+ font-size:38px;
+ background:linear-gradient(45deg,#FFD700,#fff);
+ -webkit-background-clip:text;
+ color:transparent;
+ text-shadow:0 0 20px rgba(255,215,0,0.4);
+}
+.hero p{
+ opacity:0.6;
+}
+
+/* OWNER CARD */
+.owner{
+ margin-top:25px;
+ padding:25px;
+ border-radius:20px;
+ background:linear-gradient(145deg,#0f0f0f,#1a1a1a);
+ box-shadow:
+ 0 0 40px rgba(255,215,0,0.15),
+ inset 0 0 20px rgba(255,215,0,0.1);
+ text-align:center;
+}
+
+.owner img{
+ width:180px;
+ border-radius:20px;
+ box-shadow:0 0 30px gold;
+}
+
+.owner h2{
+ color:#FFD700;
+ margin-top:10px;
+}
+
+.status{
+ opacity:0.7;
+}
+
+/* CARD */
+.card{
+ margin-top:20px;
+ padding:20px;
+ border-radius:18px;
+ background:rgba(15,15,15,0.9);
+ border:1px solid rgba(255,215,0,0.15);
+ box-shadow:0 0 25px rgba(255,215,0,0.1);
+}
+
+/* BUTTON */
+.btn{
+ display:block;
+ width:100%;
+ padding:15px;
+ margin:10px 0;
+ border:none;
+ border-radius:14px;
+ font-weight:bold;
+ background:linear-gradient(45deg,#FFD700,#fff);
+ color:black;
+ transition:0.3s;
+}
+.btn:hover{
+ transform:scale(1.05);
+ box-shadow:0 0 20px gold;
+}
+
+/* INPUT */
+input{
+ width:100%;
+ padding:12px;
+ border-radius:10px;
+ border:none;
+ background:#111;
+ color:white;
+ margin-top:10px;
+}
+
+/* TEXT */
+.gold{color:#FFD700}
 
 /* PARTICLE */
 canvas{
@@ -35,169 +134,98 @@ canvas{
  left:0;
  z-index:-1;
 }
-
-/* NAV */
-.nav{
- display:flex;
- justify-content:space-around;
- padding:12px;
- background:rgba(0,0,0,0.7);
- backdrop-filter:blur(10px);
-}
-.nav button{
- background:#111;
- border:1px solid #333;
- padding:10px;
- color:white;
- border-radius:10px;
-}
-.nav button:hover{
- background:#FFD700;
- color:black;
-}
-
-/* PAGE */
-.page{
- display:none;
- padding:20px;
- opacity:0;
- transform:translateY(20px);
- transition:0.4s;
-}
-.active{
- display:block;
- opacity:1;
- transform:translateY(0);
-}
-
-/* BOX */
-.box{
- background:rgba(20,20,20,0.8);
- border-radius:15px;
- padding:20px;
- margin-bottom:15px;
- text-align:center;
- box-shadow:0 0 20px rgba(255,215,0,0.2);
-}
-
-/* BUTTON */
-.btn{
- display:block;
- width:100%;
- padding:14px;
- margin:8px 0;
- border:none;
- border-radius:12px;
- background:linear-gradient(45deg,#FFD700,#fff);
- color:black;
- font-weight:bold;
-}
-.btn:hover{
- transform:scale(1.05);
- box-shadow:0 0 15px gold;
-}
-
-/* INPUT */
-input{
- width:100%;
- padding:12px;
- margin:5px 0;
- border-radius:10px;
- border:none;
- background:#222;
- color:white;
-}
-
-/* LOGO */
-.logo{
- width:130px;
- animation:float 3s infinite;
- filter:drop-shadow(0 0 20px gold);
-}
-@keyframes float{
- 50%{transform:translateY(-15px)}
-}
-
-/* LEADERBOARD */
-.player{
- padding:10px;
- border-bottom:1px solid #333;
-}
-
-/* CURSOR */
-.cursor{
- position:fixed;
- width:15px;
- height:15px;
- background:gold;
- border-radius:50%;
- pointer-events:none;
- filter:blur(6px);
-}
 </style>
 </head>
 
 <body>
 
-<div id="loader">ENIGMA LOADING...</div>
 <canvas id="bg"></canvas>
-<div class="cursor" id="cursor"></div>
 
 <div class="nav">
-<button onclick="navClick('home')">Home</button>
-<button onclick="navClick('play')">Play</button>
-<button onclick="navClick('leaderboard')">Leaderboard</button>
-<button onclick="navClick('community')">Community</button>
-<button onclick="navClick('tools')">Tools</button>
+<button onclick="show('home')">Home</button>
+<button onclick="show('play')">Play</button>
+<button onclick="show('leaderboard')">Leaderboard</button>
+<button onclick="show('community')">Community</button>
+<button onclick="show('tools')">Tools</button>
 </div>
 
 <!-- HOME -->
 <div id="home" class="page active">
-<div class="box">
-<img class="logo" src="https://i.postimg.cc/F1fQdYVv/file-000000002e0c71fab5230bc42b5b3130.png">
-<h2>ENIGMA SERVER</h2>
+
+<div class="hero">
+<h1>ENIGMA SERVER</h1>
+<p>⚜ Divine Private Server Experience ⚜</p>
+</div>
+
+<div class="owner">
+
+<img src="https://i.postimg.cc/pmN34kjC/me.jpg">
+
+<h2>@Marvin</h2>
+<p class="status">Status: Busy</p>
+<p class="status">Owner its fans yuika</p>
+
+</div>
+
+<div class="card">
 <p id="status">Loading...</p>
 <p id="players">0</p>
 </div>
+
 </div>
 
 <!-- PLAY -->
 <div id="play" class="page">
-<div class="box">
-<button class="btn" onclick="show('how')">How To Play</button>
-<button class="btn" onclick="window.open('https://dash.gtps.cloud/android/3141')">Download Host</button>
+
+<div class="card">
+<h2 class="gold">ANDROID</h2>
+
+<button class="btn" onclick="window.open('https://powertunnel.id.uptodown.com/android')">
+Download PowerTunnel
+</button>
+
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/android/3141')">
+PowerTunnel Host
+</button>
+
+<button class="btn" onclick="window.open('https://www.apkmirror.com/apk/xfalcon/virtual-hosts/virtual-hosts-2-1-0-release/virtual-hosts-2-1-0-android-apk-download/')">
+Download Virtual Host
+</button>
+
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/how-to-play/3141')">
+Virtual Host Config
+</button>
 </div>
+
+<div class="card">
+<h2 class="gold">IOS</h2>
+<button class="btn" onclick="window.open('https://dash.gtps.cloud/ios/3141')">
+Import Config
+</button>
 </div>
 
-<!-- HOW -->
-<div id="how" class="page">
-<div class="box">
-<h3>ANDROID</h3>
-<button class="btn" onclick="window.open('https://powertunnel.id.uptodown.com/android')">Download</button>
-
-<h3>IOS</h3>
-<button class="btn" onclick="window.open('https://dash.gtps.cloud/ios/3141')">Import</button>
-
-<h3>WINDOWS</h3>
+<div class="card">
+<h2 class="gold">PC HOST</h2>
 <pre>
 91.134.85.13 growtopia1.com
 91.134.85.13 growtopia2.com
 </pre>
 </div>
+
 </div>
 
 <!-- LEADERBOARD -->
 <div id="leaderboard" class="page">
-<div class="box">
-<h2>🏆 LEADERBOARD</h2>
+<div class="card">
+<h2 class="gold">LEADERBOARD</h2>
 <div id="playersList">Loading...</div>
 </div>
 </div>
 
 <!-- COMMUNITY -->
 <div id="community" class="page">
-<div class="box">
-<h2>COMMUNITY</h2>
+<div class="card">
+<h2 class="gold">COMMUNITY</h2>
 <button class="btn" onclick="window.open('https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t')">
 Join WhatsApp
 </button>
@@ -206,39 +234,26 @@ Join WhatsApp
 
 <!-- TOOLS -->
 <div id="tools" class="page">
-<div class="box">
-<h2>ITEM SEARCH</h2>
-<p style="color:#FFD700">⚠️ must ID (angka saja)</p>
-<input id="itemID" placeholder="Item ID">
+<div class="card">
+<h2 class="gold">ITEM SEARCH</h2>
+<p class="gold">⚠ must ID</p>
+
+<input id="itemID" placeholder="Enter ID">
 <button class="btn" onclick="searchItem()">Search</button>
+
 <img id="itemImg" width="120">
 </div>
 </div>
 
-<audio id="clickSound" src="https://www.myinstants.com/media/sounds/mouse-click.mp3"></audio>
-
 <script>
 
-// LOADER
-setTimeout(()=>loader.style.display="none",1500);
-
-// SOUND
-function playSound(){
- document.getElementById("clickSound").play();
-}
-
 // NAV
-function navClick(p){
- playSound();
- show(p);
-}
-
 function show(p){
  document.querySelectorAll('.page').forEach(e=>e.classList.remove('active'));
  document.getElementById(p).classList.add('active');
 }
 
-// API LOAD
+// API
 async function load(){
  let res=await fetch("https://api.gtps.cloud/api/server/public/3141");
  let d=await res.json();
@@ -246,25 +261,14 @@ async function load(){
  status.innerHTML=d.state.server_status==1?"🟢 ONLINE":"🔴 OFFLINE";
  players.innerHTML="Players: "+d.state.players_online;
 
- // LEADERBOARD (ambil players list kalau ada)
- let list="";
- if(d.state.players){
-  d.state.players.forEach(p=>{
-    list+=`<div class="player">${p.name}</div>`;
-  });
- } else {
-  list="No leaderboard data";
- }
-
- playersList.innerHTML=list;
+ playersList.innerHTML="Players Online: "+d.state.players_online;
 }
-setInterval(load,5000);
-load();
+setInterval(load,5000); load();
 
-// ITEM SEARCH
+// ITEM
 function searchItem(){
  let id=itemID.value;
- if(isNaN(id) || id===""){
+ if(isNaN(id)||id===""){
   alert("Item ID harus angka!");
   return;
  }
@@ -279,7 +283,7 @@ c.height=window.innerHeight;
 
 let p=[];
 for(let i=0;i<80;i++){
- p.push({x:Math.random()*c.width,y:Math.random()*c.height,dx:Math.random()-0.5,dy:Math.random()-0.5});
+ p.push({x:Math.random()*c.width,y:Math.random()*c.height,dy:Math.random()+0.5});
 }
 
 function draw(){
@@ -287,20 +291,14 @@ function draw(){
  ctx.fillStyle="gold";
  p.forEach(a=>{
   ctx.beginPath();
-  ctx.arc(a.x,a.y,2,0,Math.PI*2);
+  ctx.arc(a.x,a.y,1.5,0,Math.PI*2);
   ctx.fill();
-  a.x+=a.dx;
   a.y+=a.dy;
+  if(a.y>c.height) a.y=0;
  });
  requestAnimationFrame(draw);
 }
 draw();
-
-// CURSOR
-document.addEventListener("mousemove",e=>{
- cursor.style.left=e.clientX+"px";
- cursor.style.top=e.clientY+"px";
-});
 
 </script>
 
