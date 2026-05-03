@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Enigma - A mystical pixel adventure game with stunning pixel art and immersive gameplay"/>
+  <meta name="theme-color" content="#1E90FF"/>
+  <title>Enigma - Pixel Adventure</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Fredoka+One&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bright-gold: #FFD700;
+      --dark-gold: #FFA500;
+      --sky-blue: #1E90FF;
+      --light-blue: #87CEEB;
+      --dark-bg: #0a1428;
+      --card-bg: rgba(255,255,255,0.08);
+      --border-color: rgba(255,215,0,0.3);
+      --pixel-size: 4px;
+    }
+
+    *, *::before, *::after { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+    }
+
+    html { 
+      scroll-behavior: smooth; 
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(135deg, #0a1428 0%, #0d2b55 50%, #1a4d7a 100%);
+      color: #fff;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ===== ANIMATED PIXEL SKY BACKGROUND ===== */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(2px 2px at 15% 25%, rgba(255,255,255,0.8) 0%, transparent 100%),
+        radial-gradient(2px 2px at 85% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(2px 2px at 70% 85%, rgba(135,206,235,0.5) 0%, transparent 100%),
+        radial-gradient(2px 2px at 35% 70%, rgba(255,215,0,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 50% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(2px 2px at 90% 60%, rgba(135,206,235,0.4) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+      animation: twinkle 4s infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      right: 0; 
+      z-index: 100;
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      padding: 16px 40px;
+      background: rgba(10, 20, 40, 0.98);
+      backdrop-filter: blur(15px);
+      border-bottom: 3px solid var(--bright-gold);
+      box-shadow: 0 4px 15px rgba(255,215,0,0.3);
+    }
+
+    .nav-logo {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.8rem;
+      background: linear-gradient(135deg, var(--bright-gold), var(--dark-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+      animation: logoFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .nav-logo:hover {
+      transform: translateY(-8px) scale(1.05);
+    }
+
+    .nav-links { 
+      display: flex; 
+      gap: 32px; 
+      list-style: none; 
+    }
+
+    .nav-links a {
+      font-family: 'Press Start 2P', cursive;
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.7rem;
+      font-weight: bold;
+      transition: all 0.2s;
+      position: relative;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 3px;
+      background: var(--bright-gold);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--bright-gold);
+      text-shadow: 0 0 10px rgba(255,215,0,0.8);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; 
+      flex-direction: column;
+      align-items: center; 
+      justify-content: center;
+      text-align: center;
+      padding: 120px 20px 60px;
+      overflow: hidden;
+      margin-top: 60px;
+    }
+
+    .hero-bg {
+      position: absolute; 
+      inset: 0; 
+      z-index: 0;
+      background: linear-gradient(180deg, #1E90FF 0%, #4169E1 40%, #87CEEB 70%, #1E90FF 100%);
+    }
+
+    /* Pixel Clouds */
+    .cloud {
+      position: absolute;
+      background: linear-gradient(135deg, #fff 0%, #f5f5f5 100%);
+      border-radius: 20px;
+      animation: floatCloud linear infinite;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2));
+    }
+
+    .c1 { 
+      width: 140px; 
+      height: 50px; 
+      top: 15%; 
+      left: -160px; 
+      animation-duration: 25s; 
+      animation-delay: 0s; 
+      border-radius: 40px;
+    }
+
+    .c2 { 
+      width: 180px; 
+      height: 60px; 
+      top: 35%; 
+      left: -220px; 
+      animation-duration: 35s; 
+      animation-delay: 8s; 
+      opacity: 0.85; 
+      border-radius: 45px;
+    }
+
+    .c3 { 
+      width: 120px; 
+      height: 40px; 
+      top: 60%; 
+      left: -140px; 
+      animation-duration: 20s; 
+      animation-delay: 4s; 
+      opacity: 0.7; 
+      border-radius: 35px;
+    }
+
+    @keyframes floatCloud { 
+      from { transform: translateX(0); } 
+      to { transform: translateX(120vw); } 
+    }
+
+    /* ENIGMA Text Styling */
+    .enigma-title {
+      position: relative; 
+      z-index: 2;
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(2rem, 8vw, 5rem);
+      background: linear-gradient(135deg, var(--bright-gold) 0%, #FFE44D 50%, var(--dark-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin: 20px 0;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.4);
+      letter-spacing: 4px;
+      animation: enigmaFloat 3.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255,215,0,0.6));
+      line-height: 1.2;
+    }
+
+    @keyframes enigmaFloat {
+      0%, 100% { 
+        transform: translateY(0) scale(1);
+      }
+      50% { 
+        transform: translateY(-20px) scale(1.02);
+      }
+    }
+
+    .hero-tagline {
+      position: relative; 
+      z-index: 2;
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(1.2rem, 3vw, 1.8rem);
+      color: #fff;
+      margin: 20px 0;
+      max-width: 600px;
+      line-height: 1.5;
+      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+      letter-spacing: 1px;
+    }
+
+    .hero-sub {
+      position: relative; 
+      z-index: 2;
+      color: rgba(255,255,255,0.85);
+      font-size: 1rem;
+      max-width: 580px;
+      margin: 16px auto 30px;
+      line-height: 1.8;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
+    }
+
+    .hero-badges {
+      position: relative; 
+      z-index: 2;
+      display: flex; 
+      gap: 14px; 
+      flex-wrap: wrap; 
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .badge {
+      background: linear-gradient(135deg, rgba(255,215,0,0.15), rgba(255,165,0,0.1));
+      border: 2px solid var(--bright-gold);
+      color: var(--bright-gold);
+      padding: 8px 18px;
+      border-radius: 25px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      transition: all 0.2s;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    .badge:hover {
+      background: rgba(255,215,0,0.25);
+      transform: translateY(-3px);
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+
+    .btn-play {
+      position: relative; 
+      z-index: 2;
+      display: inline-block;
+      background: linear-gradient(135deg, var(--bright-gold), var(--dark-gold));
+      color: #000;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.1rem;
+      padding: 16px 50px;
+      border-radius: 40px;
+      text-decoration: none;
+      border: 3px solid #000;
+      cursor: pointer;
+      box-shadow: 0 8px 0 #000, 0 10px 25px rgba(255,215,0,0.5);
+      transition: all 0.1s;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-play:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 0 #000, 0 15px 30px rgba(255,215,0,0.7);
+    }
+
+    .btn-play:active { 
+      transform: translateY(4px);
+      box-shadow: 0 4px 0 #000, 0 5px 15px rgba(255,215,0,0.4);
+    }
+
+    /* ===== SECTIONS ===== */
+    section { 
+      position: relative; 
+      z-index: 1; 
+      padding: 80px 20px; 
+    }
+
+    .section-title {
+      text-align: center;
+      font-family: 'Press Start 2P', cursive;
+      font-size: clamp(1.5rem, 5vw, 2.8rem);
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--bright-gold), var(--dark-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: rgba(255,255,255,0.7);
+      font-size: 0.95rem;
+      margin-bottom: 50px;
+      font-family: 'Fredoka One', cursive;
+    }
+
+    .divider {
+      width: 100px; 
+      height: 5px;
+      background: linear-gradient(90deg, var(--bright-gold), var(--dark-gold));
+      border-radius: 5px;
+      margin: 16px auto 0;
+      box-shadow: 0 0 15px rgba(255,215,0,0.5);
+    }
+
+    .container { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+    }
+
+    /* ===== FEATURES SECTION ===== */
+    #features { 
+      background: linear-gradient(180deg, #0a1428 0%, #0d2555 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 50px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 3px solid var(--bright-gold);
+      border-radius: 15px;
+      padding: 32px 24px;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .feature-card:hover::before {
+      left: 100%;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(255,215,0,0.3);
+      border-color: #FFE44D;
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-title {
+      font-family: 'Press Start 2P', cursive;
+      font-size: 1.3rem;
+      color: var(--bright-gold);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .feature-desc {
+      color: rgba(255,255,255,0.75);
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-family: 'Fredoka One', cursive;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: #000;
+      border-top: 5px solid var(--bright-gold);
+      text-align: center;
+      padding: 40px 20px;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.85rem;
+      font-family: 'Press Start 2P', cursive;
+    }
+
+    footer p {
+      margin: 8px 0;
+      letter-spacing: 1px;
+    }
+
+    footer span { 
+      color: var(--bright-gold); 
+      font-weight: 900; 
+    }
+
+    /* ===== SCROLL REVEAL ===== */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      nav { 
+        padding: 12px 20px; 
+      }
+
+      .nav-logo {
+        font-size: 1.3rem;
+        animation: none;
+      }
+
+      .nav-links { 
+        gap: 16px; 
+      }
+
+      .nav-links a { 
+        font-size: 0.6rem; 
+      }
+
+      .hero {
+        padding: 100px 20px 60px;
+        margin-top: 60px;
+      }
+
+      .enigma-title {
+        font-size: clamp(1.5rem, 6vw, 3.5rem);
+      }
+
+      section {
+        padding: 60px 20px;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .btn-play {
+        padding: 14px 40px;
+        font-size: 0.9rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav { 
+        padding: 10px 15px; 
+      }
+
+      .nav-logo {
+        font-size: 1rem;
+      }
+
+      .nav-links {
+        gap: 10px;
+      }
+
+      .nav-links a {
+        font-size: 0.5rem;
+      }
+
+      .enigma-title {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+
+      .hero-badges {
+        gap: 8px;
+      }
+
+      .badge {
+        padding: 6px 12px;
+        font-size: 0.6rem;
+      }
+
+      .btn-play {
+        padding: 12px 32px;
+        font-size: 0.8rem;
+      }
+
+      .feature-card {
+        padding: 20px 16px;
+      }
+
+      .feature-icon {
+        font-size: 2.5rem;
+      }
+
+      .feature-title {
+        font-size: 1rem;
+      }
+
+      footer {
+        font-size: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">⭐ ENIGMA</a>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#footer">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="cloud c1"></div>
+  <div class="cloud c2"></div>
+  <div class="cloud c3"></div>
+
+  <h1 class="enigma-title">ENIGMA</h1>
+  <h2 class="hero-tagline">Discover the Mystery. Unlock the Adventure.</h2>
+  <p class="hero-sub">
+    Enter a world of pixel-perfect graphics, challenging puzzles, and unforgettable adventures. Every world hides a secret waiting to be discovered.
+  </p>
+
+  <div class="hero-badges">
+    <span class="badge">🎮 Gameplay</span>
+    <span class="badge">🎨 Pixel Art</span>
+    <span class="badge">🏆 Challenges</span>
+    <span class="badge">🌍 Worlds</span>
+  </div>
+
+  <a href="#features" class="btn-play">▶ Play Now</a>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="container">
+    <h2 class="section-title">Why Choose ENIGMA?</h2>
+    <div class="divider"></div>
+    <p class="section-sub">Experience pixel-perfect adventure like never before</p>
+
+    <div class="features-grid">
+
+      <!-- Feature 1 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">🎨</span>
+        <div class="feature-title">Pixel Art</div>
+        <p class="feature-desc">
+          Beautiful hand-crafted pixel graphics bring the world to life with stunning visuals and smooth animations.
+        </p>
+      </div>
+
+      <!-- Feature 2 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">🧩</span>
+        <div class="feature-title">Puzzles</div>
+        <p class="feature-desc">
+          Solve intricate puzzles and overcome challenging obstacles to unlock the secrets of each world.
+        </p>
+      </div>
+
+      <!-- Feature 3 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">🗺️</span>
+        <div class="feature-title">Exploration</div>
+        <p class="feature-desc">
+          Explore vast open worlds filled with hidden treasures, secret passages, and mysterious NPCs.
+        </p>
+      </div>
+
+      <!-- Feature 4 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">⚔️</span>
+        <div class="feature-title">Combat</div>
+        <p class="feature-desc">
+          Master epic combat systems and battle legendary creatures with unique abilities and strategies.
+        </p>
+      </div>
+
+      <!-- Feature 5 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">💎</span>
+        <div class="feature-title">Rewards</div>
+        <p class="feature-desc">
+          Collect rare items, unlock powerful abilities, and earn achievements throughout your journey.
+        </p>
+      </div>
+
+      <!-- Feature 6 -->
+      <div class="feature-card reveal">
+        <span class="feature-icon">👥</span>
+        <div class="feature-title">Community</div>
+        <p class="feature-desc">
+          Join a vibrant community of players, share discoveries, and compete in global leaderboards.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p>Made with 💛 by <span>ENIGMA TEAM</span></p>
+  <p>© 2026 ENIGMA - Where Every World Hides a Secret</p>
+  <p>⭐ Press START to Begin Your Adventure ⭐</p>
+</footer>
+
+<script>
+  // Scroll reveal animation
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, i * 100);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  reveals.forEach(el => observer.observe(el));
+
+  // Smooth scroll for links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Add some interactivity to the title
+  const enigmaTitle = document.querySelector('.enigma-title');
+  enigmaTitle.addEventListener('mouseenter', function() {
+    this.style.animation = 'none';
+    setTimeout(() => {
+      this.style.animation = 'enigmaFloat 3.5s ease-in-out infinite';
+    }, 10);
+  });
+</script>
+</body>
+</html>
