@@ -10,11 +10,11 @@
 body{
  font-family:Arial;
  background:#000;
- color:#fff;
+ color:white;
  overflow-x:hidden;
 }
 
-/* LOADING */
+/* LOADER */
 #loader{
  position:fixed;
  width:100%;
@@ -24,9 +24,8 @@ body{
  justify-content:center;
  align-items:center;
  z-index:999;
- font-size:25px;
  color:#FFD700;
- letter-spacing:3px;
+ font-size:25px;
 }
 
 /* PARTICLE */
@@ -42,10 +41,8 @@ canvas{
  display:flex;
  justify-content:space-around;
  padding:12px;
- background:rgba(0,0,0,0.6);
+ background:rgba(0,0,0,0.7);
  backdrop-filter:blur(10px);
- position:sticky;
- top:0;
 }
 .nav button{
  background:#111;
@@ -59,7 +56,7 @@ canvas{
  color:black;
 }
 
-/* PAGE ANIMATION */
+/* PAGE */
 .page{
  display:none;
  padding:20px;
@@ -73,14 +70,14 @@ canvas{
  transform:translateY(0);
 }
 
-/* CARD */
+/* BOX */
 .box{
  background:rgba(20,20,20,0.8);
  border-radius:15px;
  padding:20px;
  margin-bottom:15px;
  text-align:center;
- box-shadow:0 0 25px rgba(255,215,0,0.15);
+ box-shadow:0 0 20px rgba(255,215,0,0.2);
 }
 
 /* BUTTON */
@@ -94,7 +91,6 @@ canvas{
  background:linear-gradient(45deg,#FFD700,#fff);
  color:black;
  font-weight:bold;
- transition:0.2s;
 }
 .btn:hover{
  transform:scale(1.05);
@@ -122,6 +118,12 @@ input{
  50%{transform:translateY(-15px)}
 }
 
+/* LEADERBOARD */
+.player{
+ padding:10px;
+ border-bottom:1px solid #333;
+}
+
 /* CURSOR */
 .cursor{
  position:fixed;
@@ -144,9 +146,8 @@ input{
 <div class="nav">
 <button onclick="navClick('home')">Home</button>
 <button onclick="navClick('play')">Play</button>
-<button onclick="navClick('account')">Account</button>
-<button onclick="navClick('chat')">Chat</button>
-<button onclick="navClick('shop')">Shop</button>
+<button onclick="navClick('leaderboard')">Leaderboard</button>
+<button onclick="navClick('community')">Community</button>
 <button onclick="navClick('tools')">Tools</button>
 </div>
 
@@ -185,42 +186,32 @@ input{
 </div>
 </div>
 
-<!-- ACCOUNT -->
-<div id="account" class="page">
+<!-- LEADERBOARD -->
+<div id="leaderboard" class="page">
 <div class="box">
-<input id="ruser" placeholder="Username">
-<input id="rpass" placeholder="Password">
-<button class="btn" onclick="register()">Register</button>
-<input id="luser" placeholder="Username">
-<input id="lpass" placeholder="Password">
-<button class="btn" onclick="login()">Login</button>
-<p id="loginInfo"></p>
+<h2>🏆 LEADERBOARD</h2>
+<div id="playersList">Loading...</div>
 </div>
 </div>
 
-<!-- CHAT -->
-<div id="chat" class="page">
+<!-- COMMUNITY -->
+<div id="community" class="page">
 <div class="box">
-<input id="msg">
-<button class="btn" onclick="sendMsg()">Send</button>
-<div id="chatBox"></div>
-</div>
-</div>
-
-<!-- SHOP -->
-<div id="shop" class="page">
-<div class="box">
-<p>Balance: <span id="bal">0</span></p>
-<button class="btn" onclick="buy()">Buy VIP</button>
+<h2>COMMUNITY</h2>
+<button class="btn" onclick="window.open('https://chat.whatsapp.com/Bgn1nn4B9qSGJ437zLDTWo?mode=gi_t')">
+Join WhatsApp
+</button>
 </div>
 </div>
 
 <!-- TOOLS -->
 <div id="tools" class="page">
 <div class="box">
-<input id="itemID">
-<button class="btn" onclick="searchItem()">Search Item</button>
-<img id="itemImg" width="100">
+<h2>ITEM SEARCH</h2>
+<p style="color:#FFD700">⚠️ must ID (angka saja)</p>
+<input id="itemID" placeholder="Item ID">
+<button class="btn" onclick="searchItem()">Search</button>
+<img id="itemImg" width="120">
 </div>
 </div>
 
@@ -247,62 +238,37 @@ function show(p){
  document.getElementById(p).classList.add('active');
 }
 
-// API
+// API LOAD
 async function load(){
  let res=await fetch("https://api.gtps.cloud/api/server/public/3141");
  let d=await res.json();
- status.innerHTML=d.state.server_status==1?"ONLINE":"OFFLINE";
+
+ status.innerHTML=d.state.server_status==1?"🟢 ONLINE":"🔴 OFFLINE";
  players.innerHTML="Players: "+d.state.players_online;
-}
-setInterval(load,5000); load();
 
-// REGISTER
-function register(){
- let u=JSON.parse(localStorage.getItem("users")||"{}");
- u[ruser.value]={pass:rpass.value,bal:100};
- localStorage.setItem("users",JSON.stringify(u));
- alert("Registered");
-}
-
-// LOGIN
-function login(){
- let u=JSON.parse(localStorage.getItem("users")||"{}");
- if(u[luser.value] && u[luser.value].pass==lpass.value){
-  localStorage.setItem("user",luser.value);
-  loginInfo.innerHTML="Success";
-  updateUser();
+ // LEADERBOARD (ambil players list kalau ada)
+ let list="";
+ if(d.state.players){
+  d.state.players.forEach(p=>{
+    list+=`<div class="player">${p.name}</div>`;
+  });
+ } else {
+  list="No leaderboard data";
  }
-}
 
-// USER
-function updateUser(){
- let u=localStorage.getItem("user");
- if(!u)return;
- let users=JSON.parse(localStorage.getItem("users"));
- bal.innerHTML=users[u].bal;
+ playersList.innerHTML=list;
 }
-updateUser();
+setInterval(load,5000);
+load();
 
-// CHAT
-function sendMsg(){
- let d=JSON.parse(localStorage.getItem("chat")||"[]");
- d.push(msg.value);
- localStorage.setItem("chat",JSON.stringify(d));
- chatBox.innerHTML=d.map(x=>"<p>"+x+"</p>").join("");
-}
-
-// SHOP
-function buy(){
- let u=localStorage.getItem("user");
- let users=JSON.parse(localStorage.getItem("users"));
- users[u].bal-=10;
- localStorage.setItem("users",JSON.stringify(users));
- updateUser();
-}
-
-// ITEM
+// ITEM SEARCH
 function searchItem(){
- itemImg.src="https://api.gtps.cloud/api/item/texture/3141/"+itemID.value;
+ let id=itemID.value;
+ if(isNaN(id) || id===""){
+  alert("Item ID harus angka!");
+  return;
+ }
+ itemImg.src="https://api.gtps.cloud/api/item/texture/3141/"+id;
 }
 
 // PARTICLE
